@@ -2,6 +2,9 @@
 
 Use this checklist before bumping the card or calling a Career Planner release ready.
 
+The root Career Planner project version lives in `VERSION`. The `card/` submodule
+has its own independent version in `card/card.json` and git tags.
+
 ## 1. Sync the card
 
 ```bash
@@ -53,7 +56,7 @@ Only skeleton docs, card pins, and non-personal card logic should be tracked.
 ## 4. Check local dependencies
 
 ```bash
-command -v pdflatex
+command -v pdflatex || test -x /Library/TeX/texbin/pdflatex
 ```
 
 Alignment can emit `.tex` without `pdflatex`, but a release smoke test should build

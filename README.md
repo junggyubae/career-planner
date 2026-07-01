@@ -2,6 +2,8 @@
 
 A single **Darwinian Mind Card** that helps you plan your next career step — with a focus on academic / research paths. The card is the **policy** in an RL-shaped model: it maps your **state** + **goal** → **action**.
 
+Project version: [`0.1`](VERSION). The embedded card has its own independently versioned release line.
+
 > Full spec: [.jg/prd-career-planner-card.md](.jg/prd-career-planner-card.md)
 
 ## The model — `state · goal · action`
