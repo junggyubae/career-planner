@@ -28,7 +28,7 @@ career-planner/
 │   ├── identity.md           #   name, contact, links, current status
 │   ├── experience/           #   one file per item (frontmatter) → derived TIMELINE.md
 │   ├── interests.md          #   what pulls you — research/career interests & open questions
-│   ├── beliefs.md            #   your core identity — values + how you act on them; drives Finder fit AND SOP voice
+│   ├── beliefs.md            #   your core identity — values + how you act on them; drives action
 │   └── uploads/              #   raw CV/SOP + your own templates
 ├── goal/                     # PRIVATE — goals.md (short / mid / long-term)
 ├── action/                   # PRIVATE — git-ignored (what you do)
