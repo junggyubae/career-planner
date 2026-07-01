@@ -1,0 +1,38 @@
+{
+  "lockfileVersion": 3,
+  "store": {
+    "minDrwnVersion": "0.3.0"
+  },
+  "cards": [
+    {
+      "name": "@junggyubae/career-planner-card",
+      "requested": "@junggyubae/career-planner-card@0.1.0",
+      "version": "0.1.0",
+      "path": "/Users/jgbae/.agents/drwn/extracted/a23365bc641471c9ffe4864f6a9c93c9d04850f6",
+      "integrity": "sha256-9873c8aed8cf0ee773a6aef8ed775c1ff8ad115bf65ac54a74c641d5ba7c2c31",
+      "manifest": {
+        "name": "@junggyubae/career-planner-card",
+        "version": "0.1.0",
+        "description": "Career planner Mind Card. Designed to run ONLY inside the career-planner project — it depends on that project's memory/ and output/ layout. Build a private file-based career memory (upload/interview), find PIs/labs at a target school, and generate tailored CV + SOP (LaTeX to PDF) grounded in that memory.",
+        "skills": {
+          "include": [
+            "info-retrieval",
+            "finder",
+            "alignment"
+          ]
+        }
+      },
+      "skills": [
+        "info-retrieval",
+        "finder",
+        "alignment"
+      ],
+      "hooks": [],
+      "registry": null,
+      "origin": "store",
+      "git": {
+        "commit": "5ac3aa7a9fa51fdcd17eaa165cf5ae832010b2bc"
+      }
+    }
+  ]
+}

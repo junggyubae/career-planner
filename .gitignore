@@ -18,6 +18,16 @@ memory/**
 !memory/**/README.md
 !memory/**/.gitkeep
 
+# Darwinian Minds — generated / materialized state (regenerate with `drwn write`).
+# The pins (.agents/drwn/config.json + card.lock) ARE tracked, below is derived.
+/.claude/
+/.codex/
+/.cursor/
+/.mcp.json
+/.agents/drwn/*
+!/.agents/drwn/config.json
+!/.agents/drwn/card.lock
+
 # LaTeX build artifacts
 *.aux
 *.log
