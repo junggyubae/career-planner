@@ -6,13 +6,13 @@
   "cards": [
     {
       "name": "@junggyubae/career-planner-card",
-      "requested": "@junggyubae/career-planner-card@0.1.0",
-      "version": "0.1.0",
-      "path": "/Users/jgbae/.agents/drwn/extracted/a23365bc641471c9ffe4864f6a9c93c9d04850f6",
-      "integrity": "sha256-9873c8aed8cf0ee773a6aef8ed775c1ff8ad115bf65ac54a74c641d5ba7c2c31",
+      "requested": "@junggyubae/career-planner-card@0.1.1",
+      "version": "0.1.1",
+      "path": "/Users/jgbae/.agents/drwn/extracted/af4547397c993de9a923c3ffd2e8aa59b2895077",
+      "integrity": "sha256-0761ebb3c4479e5942111133f398af1bd7e59e54bd1d5d0e31104055265e3862",
       "manifest": {
         "name": "@junggyubae/career-planner-card",
-        "version": "0.1.0",
+        "version": "0.1.1",
         "description": "Career planner Mind Card. Designed to run ONLY inside the career-planner project — it depends on that project's memory/ and output/ layout. Build a private file-based career memory (upload/interview), find PIs/labs at a target school, and generate tailored CV + SOP (LaTeX to PDF) grounded in that memory.",
         "skills": {
           "include": [
@@ -31,7 +31,7 @@
       "registry": null,
       "origin": "store",
       "git": {
-        "commit": "5ac3aa7a9fa51fdcd17eaa165cf5ae832010b2bc"
+        "commit": "e084474acb3a9f4b8b7347102bcd5cb4a2ffdca7"
       }
     }
   ]
