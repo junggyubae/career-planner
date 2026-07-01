@@ -56,7 +56,7 @@ git clone --recurse-submodules https://github.com/junggyubae/career-planner.git
 # already cloned:
 git submodule update --init --recursive
 # bump to a newer card release:
-git -C card fetch --tags && git -C card checkout v0.2.3 && git add card && git commit -m "Bump card"
+git -C card fetch --tags && git -C card checkout v0.2.4 && git add card && git commit -m "Bump card"
 ```
 
 ## Privacy model
@@ -65,3 +65,9 @@ git -C card fetch --tags && git -C card checkout v0.2.3 && git add card && git c
 - **Your data is private.** `state/`, `goal/`, and `action/` are git-ignored — your identity, experience, interests, beliefs, goals, and applications never leave your machine.
 
 Requires `pdflatex` for PDF compilation (the card still emits `.tex` if it's missing).
+
+## Release checklist
+
+Before publishing a new version, run the short release and smoke-test checklist in
+[`RELEASE.md`](RELEASE.md). The checklist verifies the card pin, generated skills,
+privacy boundary, and the three core workflows.

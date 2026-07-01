@@ -1,18 +1,15 @@
 {
-  "lockfileVersion": 3,
-  "store": {
-    "minDrwnVersion": "0.3.0"
-  },
+  "lockfileVersion": 2,
   "cards": [
     {
       "name": "@junggyubae/career-planner-card",
-      "requested": "@junggyubae/career-planner-card@0.2.3",
-      "version": "0.2.3",
-      "path": "/Users/jgbae/.agents/drwn/extracted/746f3a0e431d1a1290c3ffdf5bd8ab7d27aff783",
-      "integrity": "sha256-1c827af3493e2823f7132fb2bec8558b4e908762832c64c8e91e7ff96ebedfb0",
+      "requested": "@junggyubae/career-planner-card@0.2.4",
+      "version": "0.2.4",
+      "path": "/Users/jgbae/.agents/drwn/extracted/87bb4d601fa7e0e98968babde3a0963d6b3167c8",
+      "integrity": "sha256-352c43716e481bd185c7b8c7de8ba4dcadad884c52368ca246262dede88649c9",
       "manifest": {
         "name": "@junggyubae/career-planner-card",
-        "version": "0.2.3",
+        "version": "0.2.4",
         "description": "Career planner Mind Card. Designed to run ONLY inside the career-planner project — it depends on that project's state/ goal/ action/ layout. Model: state (who you are — incl. beliefs, the core identity) + goal (where you're going) → the card is the policy that produces action (discovery + applications). Build private career state via upload/interview, find PIs/labs at a target school, and generate tailored CV + SOP (LaTeX to PDF) grounded in that state.",
         "skills": {
           "include": [
@@ -27,11 +24,10 @@
         "finder",
         "alignment"
       ],
-      "hooks": [],
       "registry": null,
       "origin": "store",
       "git": {
-        "commit": "6f64065703948c9faf1a89e9979e368addba2bb2"
+        "commit": "76e5a7163c025c8983fdae8d28b2354f2d64eb0a"
       }
     }
   ]
