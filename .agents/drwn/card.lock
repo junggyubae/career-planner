@@ -6,14 +6,14 @@
   "cards": [
     {
       "name": "@junggyubae/career-planner-card",
-      "requested": "@junggyubae/career-planner-card@0.2.0",
-      "version": "0.2.0",
-      "path": "/Users/jgbae/.agents/drwn/extracted/aed94229a968bd1b1c5071d1e43baa7781e9ac2a",
-      "integrity": "sha256-642d8b0b7f5d49763fd1fce8d2f30b5b161dd4cbb16c311f4c39f84df5ccbbf6",
+      "requested": "@junggyubae/career-planner-card@0.2.1",
+      "version": "0.2.1",
+      "path": "/Users/jgbae/.agents/drwn/extracted/528dd58ef17d2760f4950f6d5995a341611ce53c",
+      "integrity": "sha256-89454d9a8dce12cf6b732378ebbfec26f6e1264455d1da9f50cf2149164db5f7",
       "manifest": {
         "name": "@junggyubae/career-planner-card",
-        "version": "0.2.0",
-        "description": "Career planner Mind Card. Designed to run ONLY inside the career-planner project — it depends on that project's state/ goal/ action/ layout. Model: state (who you are) + goal (where you're going) → the card is the policy that produces action (discovery + applications). Build private career state via upload/interview, find PIs/labs at a target school, and generate tailored CV + SOP (LaTeX to PDF) grounded in that state.",
+        "version": "0.2.1",
+        "description": "Career planner Mind Card. Designed to run ONLY inside the career-planner project — it depends on that project's state/ goal/ action/ layout. Model: state (who you are — incl. beliefs, the core identity) + goal (where you're going) → the card is the policy that produces action (discovery + applications). Build private career state via upload/interview, find PIs/labs at a target school, and generate tailored CV + SOP (LaTeX to PDF) grounded in that state.",
         "skills": {
           "include": [
             "info-retrieval",
@@ -31,7 +31,7 @@
       "registry": null,
       "origin": "store",
       "git": {
-        "commit": "2db7ace97d89666f88567b0c44ff0c6b922d13b3"
+        "commit": "27b2d7a945f7480f40d3dbb3f022846e9524754a"
       }
     }
   ]
