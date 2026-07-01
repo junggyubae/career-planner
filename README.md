@@ -56,7 +56,7 @@ git clone --recurse-submodules https://github.com/junggyubae/career-planner.git
 # already cloned:
 git submodule update --init --recursive
 # bump to a newer card release:
-git -C card fetch --tags && git -C card checkout v0.2.1 && git add card && git commit -m "Bump card"
+git -C card fetch --tags && git -C card checkout v0.2.2 && git add card && git commit -m "Bump card"
 ```
 
 ## Privacy model

@@ -6,13 +6,13 @@
   "cards": [
     {
       "name": "@junggyubae/career-planner-card",
-      "requested": "@junggyubae/career-planner-card@0.2.1",
-      "version": "0.2.1",
-      "path": "/Users/jgbae/.agents/drwn/extracted/528dd58ef17d2760f4950f6d5995a341611ce53c",
-      "integrity": "sha256-89454d9a8dce12cf6b732378ebbfec26f6e1264455d1da9f50cf2149164db5f7",
+      "requested": "@junggyubae/career-planner-card@0.2.2",
+      "version": "0.2.2",
+      "path": "/Users/jgbae/.agents/drwn/extracted/5cf2dc0b5ad26943f259c254908b45dd6bcdee0c",
+      "integrity": "sha256-cbba6104b08a723fd095fc0783fc344ee8fbf69405da38ef1dbab65ebd3f08eb",
       "manifest": {
         "name": "@junggyubae/career-planner-card",
-        "version": "0.2.1",
+        "version": "0.2.2",
         "description": "Career planner Mind Card. Designed to run ONLY inside the career-planner project — it depends on that project's state/ goal/ action/ layout. Model: state (who you are — incl. beliefs, the core identity) + goal (where you're going) → the card is the policy that produces action (discovery + applications). Build private career state via upload/interview, find PIs/labs at a target school, and generate tailored CV + SOP (LaTeX to PDF) grounded in that state.",
         "skills": {
           "include": [
@@ -31,7 +31,7 @@
       "registry": null,
       "origin": "store",
       "git": {
-        "commit": "27b2d7a945f7480f40d3dbb3f022846e9524754a"
+        "commit": "671fb5d07152b069a27d9dac49aee26ad7880dcb"
       }
     }
   ]
