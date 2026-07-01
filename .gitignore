@@ -1,0 +1,30 @@
+# ─────────────────────────────────────────────────────────────
+# Privacy boundary: personal memory & generated outputs are PRIVATE.
+# Never commit or push them to a public remote.
+# The shareable artifact is the card/ (logic + default templates) only.
+# ─────────────────────────────────────────────────────────────
+
+# Generated CVs, SOPs, PI reports, per-application folders — contain personal data
+/output/*
+!/output/.gitkeep
+!/output/README.md
+
+# All memory contents are private...
+memory/**
+
+# ...but keep the folder skeleton + docs so the STRUCTURE stays shareable
+# (data files like profile.md, _manager.md, experience/*.md, uploads/* remain ignored)
+!memory/**/
+!memory/**/README.md
+!memory/**/.gitkeep
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# OS / editor cruft
+.DS_Store

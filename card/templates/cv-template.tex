@@ -1,0 +1,89 @@
+% ============================================================
+% Default CV template — modern one-page academic CV
+% Compiles with a vanilla pdflatex toolchain (no exotic packages).
+% Alignment fills the <<PLACEHOLDER>> fields from memory.
+% Keep it to ONE page: trim entries to the most relevant.
+% ============================================================
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1.6cm]{geometry}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+
+% --- palette ---
+\definecolor{accent}{HTML}{1A5276}
+\definecolor{muted}{HTML}{555555}
+
+% --- section styling ---
+\titleformat{\section}
+  {\color{accent}\large\bfseries\scshape}{}{0em}{}[\color{accent}\titlerule]
+\titlespacing*{\section}{0pt}{10pt}{6pt}
+
+\setlist[itemize]{leftmargin=1.2em,itemsep=1pt,topsep=2pt,parsep=0pt}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+
+% --- helper: one experience entry ---
+% \entry{Title}{Organization}{Dates}{Location}
+\newcommand{\entry}[4]{%
+  \textbf{#1} \hfill \textcolor{muted}{#3}\\[1pt]
+  \textit{#2} \hfill \textcolor{muted}{\textit{#4}}\\[2pt]
+}
+
+\begin{document}
+
+% ============================== HEADER ==============================
+\begin{center}
+  {\huge\bfseries <<FULL_NAME>>}\\[4pt]
+  \textcolor{muted}{<<HEADLINE>>}\\[4pt]
+  <<EMAIL>> \;$\vert$\; <<PHONE>> \;$\vert$\; <<LOCATION>>\\[2pt]
+  \href{<<HOMEPAGE_URL>>}{<<HOMEPAGE_LABEL>>} \;$\vert$\;
+  \href{<<GITHUB_URL>>}{GitHub} \;$\vert$\;
+  \href{<<LINKEDIN_URL>>}{LinkedIn} \;$\vert$\;
+  \href{<<SCHOLAR_URL>>}{Scholar}
+\end{center}
+
+% ============================== EDUCATION ==============================
+\section{Education}
+\entry{<<DEGREE>>}{<<INSTITUTION>>}{<<EDU_DATES>>}{<<EDU_LOCATION>>}
+\begin{itemize}
+  \item <<EDU_DETAIL_1>>  % e.g. GPA, honors, relevant coursework, thesis
+\end{itemize}
+
+% ============================== RESEARCH / EXPERIENCE ==============================
+\section{Research Experience}
+\entry{<<EXP1_TITLE>>}{<<EXP1_ORG>>}{<<EXP1_DATES>>}{<<EXP1_LOCATION>>}
+\begin{itemize}
+  \item <<EXP1_BULLET_1>>
+  \item <<EXP1_BULLET_2>>
+\end{itemize}
+
+\entry{<<EXP2_TITLE>>}{<<EXP2_ORG>>}{<<EXP2_DATES>>}{<<EXP2_LOCATION>>}
+\begin{itemize}
+  \item <<EXP2_BULLET_1>>
+  \item <<EXP2_BULLET_2>>
+\end{itemize}
+
+% ============================== PUBLICATIONS (optional) ==============================
+\section{Publications \& Projects}
+\begin{itemize}
+  \item <<PUB_OR_PROJECT_1>>
+  \item <<PUB_OR_PROJECT_2>>
+\end{itemize}
+
+% ============================== SKILLS ==============================
+\section{Skills}
+\textbf{Technical:} <<SKILLS_TECHNICAL>>\\[2pt]
+\textbf{Languages:} <<LANGUAGES>>
+
+% ============================== AWARDS (optional) ==============================
+\section{Awards \& Honors}
+\begin{itemize}
+  \item <<AWARD_1>>
+\end{itemize}
+
+\end{document}
