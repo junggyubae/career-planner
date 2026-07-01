@@ -4,19 +4,17 @@
 # The shareable artifact is the card/ (logic + default templates) only.
 # ─────────────────────────────────────────────────────────────
 
-# Generated CVs, SOPs, PI reports, per-application folders — contain personal data
-/output/*
-!/output/.gitkeep
-!/output/README.md
-
-# All memory contents are private...
-memory/**
-
-# ...but keep the folder skeleton + docs so the STRUCTURE stays shareable
-# (data files like profile.md, _manager.md, experience/*.md, uploads/* remain ignored)
-!memory/**/
-!memory/**/README.md
-!memory/**/.gitkeep
+# Private data — state (who you are), goal (where you're going), action (what you do).
+# Never commit. Keep only the folder-skeleton READMEs so the STRUCTURE stays shareable.
+state/**
+!state/**/
+!state/**/README.md
+goal/**
+!goal/**/
+!goal/**/README.md
+action/**
+!action/**/
+!action/**/README.md
 
 # Darwinian Minds — generated / materialized state (regenerate with `drwn write`).
 # The pins (.agents/drwn/config.json + card.lock) ARE tracked, below is derived.
