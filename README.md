@@ -27,7 +27,9 @@ career-planner/
 ├── state/                    # PRIVATE — git-ignored (who you are)
 │   ├── identity.md           #   name, contact, links, current status
 │   ├── experience/           #   one file per item (frontmatter) → derived TIMELINE.md
-│   ├── interests.md · beliefs.md · understanding.md
+│   ├── interests.md          #   what pulls you — research/career interests & open questions
+│   ├── beliefs.md            #   your values & how you work — drives Finder fit AND SOP voice
+│   ├── understanding.md      #   living self-synthesis — your current thesis; the agent reads it first
 │   └── uploads/              #   raw CV/SOP + your own templates
 ├── goal/                     # PRIVATE — goals.md (short / mid / long-term)
 ├── action/                   # PRIVATE — git-ignored (what you do)
@@ -35,6 +37,16 @@ career-planner/
 │   └── applications/         #   <slug>/ target.md + cv.{tex,pdf} + sop.{tex,pdf} + notes.md; derived BOARD.md
 └── .jg/                      # planning docs (PRD)
 ```
+
+### Inside `state/` — the three interview-derived files
+
+`identity.md` and `experience/` are facts pulled from your CV. The other three are the **self-knowledge** the card leans on hardest — usually captured through the Info-Retrieval *interview*, not an upload:
+
+- **`interests.md` — what pulls you.** The topics, problems, and open questions you're drawn to (e.g. "efficient inference", "training dynamics of RNNs"). **Finder** matches these against a lab's research to judge *topical* fit, and **Alignment** uses them to argue why a target excites you.
+- **`beliefs.md` — your values & how you work.** What you optimize for, the environment you want (mentorship style, lab culture, pace), and your non-negotiables. This is the **culture/values** lens: **Finder** ranks labs on fit beyond just topic, and **Alignment** sets the *voice* of your SOP so it sounds like you.
+- **`understanding.md` — your living self-synthesis.** A short "who I am and my current thesis about my path" — where you are, what you're leaning toward, the strengths you lead with. It's the executive summary the agent **reads first** to frame everything else, and the one page *you'd* actually reread. Keep it current; refine it whenever your direction shifts.
+
+Together they answer *what excites me*, *how I want to work*, and *where I'm heading* — the difference between a generic CV and materials that sound like a specific person.
 
 ## Card as a submodule
 
