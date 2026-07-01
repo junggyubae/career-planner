@@ -5,7 +5,7 @@
 **Last updated:** 2026-06-30
 **Runtime:** Darwinian Mind Card running inside Claude Code (agent + file-based state)
 
-> **Data model (v0.2.3):** `state · goal · action` (see §5). The card is the policy `π(action | state, goal)`. Some diagrams in §4/§6 predate the rename and still show `memory/…`/`output/…`; §5 is authoritative.
+> **Data model (v0.2.3):** `state · goal · action` (see §5). The card is the policy `π(action | state, goal)`. §5 is authoritative; a few §7 user stories still use the original `memory/…` wording as historical acceptance criteria.
 
 ---
 
@@ -65,19 +65,20 @@ flowchart TD
         ALIGN["Block 3: Alignment Skill"]
     end
 
-    subgraph MEM["Memory (markdown in repo)"]
-        BI["basic-info/"]
-        EXP["experience/"]
-        UP["uploads/"]
-        INT["interests/"]
-        BEL["beliefs/"]
+    subgraph SG["state/ + goal/ (markdown in repo)"]
+        ID["state/identity.md"]
+        EXP["state/experience/"]
+        INT["state/interests.md"]
+        BEL["state/beliefs.md"]
+        UP["state/uploads/"]
+        GO["goal/goals.md"]
     end
 
-    IR -->|refine upload / interview append| MEM
-    MEM -->|reads context| FIND
-    MEM -->|reads context| ALIGN
-    FIND -->|opportunities report| U
-    ALIGN -->|tailored CV + SOP| U
+    IR -->|refine / enrich| SG
+    SG -->|reads context| FIND
+    SG -->|reads context| ALIGN
+    FIND -->|action/discovery/ report| U
+    ALIGN -->|action/applications/ CV + SOP| U
 
     UPLOAD[/CV, SOP, docs/] --> IR
     URL[/Target URL: lab / internship / job/] --> ALIGN
@@ -85,17 +86,17 @@ flowchart TD
 
 ### 4.2 How the blocks relate
 
-- **Info Retrieval writes** to memory. **Finder and Alignment read** from it. This read/write split keeps the source of truth clean.
-- Info Retrieval has **two entry paths** that both end at the same place (enriched memory): the **upload path** and the **interview path**. **Both paths refine and enrich memory** — the interview is not merely appending, it refines existing facts too.
-- The only operations allowed on memory are **refine** and **enrichment**. No skill destructively overwrites or deletes user-authored content.
-- Finder and Alignment never invent facts — they are grounded strictly in what memory contains.
+- **Info Retrieval writes** to `state/` and `goal/`. **Finder and Alignment read** from them and write to `action/`. This read/write split keeps the source of truth clean.
+- Info Retrieval has **two entry paths** that both end at enriched state/goal: the **upload path** and the **interview path**. **Both paths refine and enrich** — the interview is not merely appending, it refines existing facts too.
+- The only operations allowed on `state`/`goal` are **refine** and **enrichment**. No skill destructively overwrites or deletes user-authored content.
+- Finder and Alignment never invent facts — they are grounded strictly in what `state` contains.
 
 ### 4.3 Why a card *and* a repo (the privacy split)
 
 The card and the repo are separated on purpose, along a **shareable vs. private** boundary:
 
 - **The card is shareable.** It bundles only the *logic* — the three skills, the interview scripts, the research/alignment behavior. It carries **no personal data**, so it can be published and reused by anyone via the Darwinian sharing flow.
-- **The repo's memory is private.** `memory/` (and generated `output/`) is **git-ignored** so a user never accidentally pushes their CV, SOP, identity, interests, or beliefs to a public remote. The memory lives locally with the user.
+- **The repo's data is private.** `state/`, `goal/`, and `action/` are **git-ignored** so a user never accidentally pushes their CV, SOP, identity, interests, beliefs, goals, or applications to a public remote. The data lives locally with the user.
 
 ```mermaid
 flowchart LR
@@ -103,20 +104,20 @@ flowchart LR
         C["Career Planner Card<br/>(skills / logic only, no personal data)"]
     end
     subgraph Private["Private — stays on the user's machine"]
-        R["repo memory/ + output/<br/>(git-ignored)"]
+        R["repo state/ + goal/ + action/<br/>(git-ignored)"]
     end
     C -.operates on.-> R
     C ==>|can be published / cloned| Others([Other users])
     R -.->|never committed to a public remote| X((( )))
 ```
 
-**Implication:** installing/sharing the card gives someone the *capability*; their own memory folder stays theirs. Two users can run the identical card against completely separate, private memories.
+**Implication:** installing/sharing the card gives someone the *capability*; their own data stays theirs. Two users can run the identical card against completely separate, private state/goal/action.
 
 ---
 
 ## 5. Data Design — `state · goal · action` (v0.2.3)
 
-> **v0.2.3 model change.** The earlier `memory/` + `output/` layout is replaced by an RL-shaped model. The card is the **policy** `π(action | state, goal)`. Diagrams in §4/§6 that predate this use the old `memory/…`/`output/…` names; the data model of record is below.
+> **v0.2.0 model change (current: v0.2.3).** The earlier `memory/` + `output/` layout was replaced by this RL-shaped model. The card is the **policy** `π(action | state, goal)`. This section is the data model of record.
 
 Every fact is a markdown file so it is diffable, greppable, and editable by hand. Structured items carry **YAML frontmatter**, and indexes are **derived** (regenerated by the agent), never hand-maintained.
 
@@ -170,43 +171,44 @@ flowchart TD
 flowchart TD
     Start([User invokes Info Retrieval]) --> Q{Upload a document<br/>or explain more?}
 
-    Q -->|Upload document| U1[Save raw file to uploads/]
+    Q -->|Upload document| U1[Save raw file to state/uploads/]
     U1 --> U2[Parse & extract facts]
-    U2 --> Uc{Conflict with<br/>existing memory?}
+    U2 --> Uc{Conflict with<br/>existing state?}
     Uc -->|Yes| Uq[Ask user to clarify<br/>which is correct]
     Uq --> U3
-    Uc -->|No| U3[Route facts to correct subfolder:<br/>basic-info / experience / interests / beliefs]
-    U3 --> U4[Update experience/_manager.md<br/>if new experiences found]
-    U4 --> Done([Memory refined / enriched])
+    Uc -->|No| U3[Route facts:<br/>state/ identity·experience·<br/>interests·beliefs + goal/]
+    U3 --> U4[Regenerate state/TIMELINE.md<br/>if experiences changed]
+    U4 --> Done([state / goal refined / enriched])
 
-    Q -->|Explain more| I1[User picks a topic:<br/>an experience / interest / belief]
-    I1 --> I2[Present a LIST of<br/>focused questions]
+    Q -->|Explain more| I1[User picks a topic:<br/>experience / interests /<br/>beliefs / goals]
+    I1 --> I2[LLM generates a LIST of<br/>focused questions on the fly]
     I2 --> I3[User answers the ones they want]
     I3 --> I4{Follow-up or<br/>next question?}
     I4 -->|Iterate| I2
-    I4 -->|Done| I5[Refine & enrich the<br/>target memory file]
-    I5 --> I6[Update manager/index if relevant]
+    I4 -->|Done| I5[Refine & enrich the<br/>target state/goal file]
+    I5 --> I6[Regenerate TIMELINE.md if relevant]
     I6 --> Done
 ```
 
-**Upload path:** the user drops a CV/SOP/etc. The card saves the raw file to `uploads/`, extracts structured facts, and **refines them into the right subfolders**. New experiences are added as files and registered in `_manager.md`. **If any extracted fact conflicts with existing memory** (e.g. different dates or titles for the same role), the card **always stops and asks the user to clarify** which is correct — it never silently picks a winner.
+**Upload path:** the user drops a CV/SOP/etc. The card saves the raw file to `state/uploads/`, extracts structured facts, and **refines them into `state/` and `goal/`**. New experiences are added as frontmatter files and the derived `state/TIMELINE.md` is regenerated. **If any extracted fact conflicts with existing state** (e.g. different dates or titles for the same role), the card **always stops and asks the user to clarify** which is correct — it never silently picks a winner.
 
-**Interview path:** the user wants to say more about a topic. The card first **presents a list of focused questions** for that topic, the user answers the ones they want, and the card **iterates** with follow-ups. Answers **refine and enrich** the relevant memory file — adding new detail *and* sharpening existing facts. Both paths perform only refine/enrichment; neither destroys prior content.
+**Interview path:** the user wants to say more about a topic. The card **generates a list of focused questions on the fly** (no fixed bank, adapted to what's already in `state`/`goal`), the user answers the ones they want, and the card **iterates** with follow-ups. Answers **refine and enrich** the relevant file — beliefs being the topic to probe deepest. Both paths perform only refine/enrichment; neither destroys prior content.
 
 ### 6.2 Block 2 — Finder (PI Finder, deep research)
 
 ```mermaid
 flowchart LR
     S([User invokes Finder]) --> S0[/User names a<br/>target school/institution/]
-    S0 --> R1[Read memory:<br/>basic-info, experience,<br/>interests, beliefs]
-    R1 --> R2[Form a research profile:<br/>skills, level, interests, beliefs/values]
+    S0 --> R1[Read state/ + goal/:<br/>identity, experience,<br/>interests, beliefs, goals]
+    R1 --> R2[Form a research profile:<br/>skills, level, interests,<br/>beliefs/values, goal direction]
     R2 --> R3[Deep research the school:<br/>discover PIs / labs there]
-    R3 --> R4[Rank PIs by fit against<br/>profile + beliefs]
-    R4 --> R5[Produce PI report:<br/>lab link, PI, why-it-fits,<br/>belief/interest alignment]
+    R3 --> Rv[Verifier pass:<br/>confirm each PI is CURRENTLY<br/>at the school & active]
+    Rv --> R4[Rank survivors by fit:<br/>topical + belief + goal]
+    R4 --> R5[Produce PI report → action/discovery/:<br/>lab link, PI, why-it-fits, verified]
     R5 --> Out([Report delivered to user])
 ```
 
-**v1 behavior:** the user **names a target school**. Finder reads the full memory (including `beliefs/`), forms a research profile, and runs **deep research scoped to that school** to surface **PIs / labs** there. Output is a **ranked report** — each PI has a lab link and a short "why this fits you" that references specific memory facts *and* belief/interest alignment.
+**v1 behavior:** the user **names a target school**. Finder reads `state/` + `goal/`, forms a research profile, runs **deep research scoped to that school**, then a **verifier pass** confirms each PI is currently at the school and active before ranking. Output (to `action/discovery/`) is a **ranked report** — each PI has a lab link, a "why this fits you" grounded in specific `state`/`goal` facts, and a verification note.
 
 **Phase 2 (noted, out of scope now):** internships and company/industry roles, school-less open discovery, structured source integrations (job boards, lab directories), saved searches, and periodic re-runs.
 
@@ -215,21 +217,23 @@ flowchart LR
 ```mermaid
 flowchart LR
     S([User provides target URL]) --> T{Template?}
-    T -->|User has one| Tu[Use user template<br/>from uploads/]
+    T -->|User has one| Tu[Use user template<br/>from state/uploads/]
     T -->|None| Td[Use bundled default<br/>.tex template]
     Tu --> A1
     Td --> A1
     A1[Fetch & analyze target:<br/>lab / internship / job page] --> A2[Extract requirements,<br/>focus areas, keywords]
-    A2 --> A3[Read memory:<br/>experience, interests,<br/>beliefs, basic-info]
-    A3 --> A4[Match memory ↔ target:<br/>select most relevant evidence]
-    A4 --> A5[Render tailored CV .tex<br/>grounded only in memory]
-    A4 --> A6[Render tailored SOP .tex<br/>in user's voice + beliefs]
-    A5 --> C[Compile .tex → .pdf]
+    A2 --> A3[Read state/ + goal/:<br/>experience, interests,<br/>beliefs, identity, goals]
+    A3 --> A4[Match state ↔ target:<br/>select most relevant evidence]
+    A4 --> A5[Render tailored CV .tex<br/>grounded only in state]
+    A4 --> A6[Render tailored SOP .tex<br/>voice from beliefs + goals]
+    A5 --> C{Compile .tex → .pdf<br/>auto-iterate on errors}
     A6 --> C
-    C --> Out([.tex + .pdf delivered])
+    C -->|CV > 1 page| Trim[Trim & tighten, recompile]
+    Trim --> C
+    C -->|builds, CV = 1 page| Out([action/applications/&lt;slug&gt;/<br/>.tex + .pdf delivered])
 ```
 
-**v1 behavior:** the user pastes a URL for a specific target. Alignment first resolves the **template**: it **asks whether the user has their own CV/SOP template** — if one exists in `uploads/`, it uses that; otherwise it uses the **bundled default template** (which we must create and ship with the card). It then fetches and analyzes the target, matches it against memory, and renders a **tailored CV and SOP as LaTeX (`.tex`)**, which it **compiles to `.pdf`**. Everything is grounded in memory — **no fabricated experience**. The SOP leans on `beliefs/` and `interests/` to sound like the user, and `beliefs/` also informs *why the user fits* the target.
+**v1 behavior:** the user pastes a URL for a specific target. Alignment first resolves the **template** (user's own from `state/uploads/`, else the bundled default), fetches and analyzes the target, matches it against `state`, and renders a **tailored CV and SOP as LaTeX**. It **compiles with `pdflatex`, auto-iterating on errors until the PDF builds**, and **enforces a strictly one-page CV** (trim + tighten + recompile). Everything is grounded in `state` — **no fabricated experience**. The SOP leans on `beliefs` and `goals` to sound like the user and argue fit. Output lands in `action/applications/<slug>/`.
 
 ### 6.4 End-to-end sequence (typical first session)
 
@@ -237,25 +241,25 @@ flowchart LR
 sequenceDiagram
     actor User
     participant Card as Career Planner Card
-    participant Mem as memory/ (repo)
+    participant Data as state/ · goal/ · action/
 
     User->>Card: Upload CV
-    Card->>Mem: Save to uploads/, refine into basic-info & experience
-    Card-->>User: Memory initialized
+    Card->>Data: Save to state/uploads/, refine into identity & experience
+    Card-->>User: state initialized (+ TIMELINE.md)
 
-    User->>Card: "Ask me about my 2024 lab work"
-    Card->>User: List of focused questions
+    User->>Card: "Interview me about my beliefs"
+    Card->>User: LLM-generated list of focused questions
     User->>Card: Answers (iterates with follow-ups)
-    Card->>Mem: Refine/enrich experience file + update _manager.md
+    Card->>Data: Refine/enrich state/beliefs.md
 
     User->>Card: Run Finder for "Stanford"
-    Card->>Mem: Read full profile + beliefs
-    Card-->>User: Ranked PIs/labs at Stanford (deep research)
+    Card->>Data: Read state/ + goal/
+    Card-->>User: Verified, ranked PIs → action/discovery/
 
     User->>Card: Align to <lab URL>
     Card->>User: Use your template or default?
-    Card->>Mem: Read experience/interests/beliefs (+ user template)
-    Card-->>User: Tailored CV + SOP as .tex + compiled .pdf
+    Card->>Data: Read state/ + goal/ (+ user template)
+    Card-->>User: One-page CV + SOP (.pdf) → action/applications/<slug>/
 ```
 
 ---
