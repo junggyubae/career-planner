@@ -1,10 +1,14 @@
 # Career Planner
 
-A single **Darwinian Mind Card** that helps you plan your next career step — with a focus on academic / research paths. The card is the **policy** in an RL-shaped model: it maps your **state** + **goal** → **action**.
+Career Planner is a local agent workspace for planning your next academic or
+research step. It keeps your private career memory on your machine, then uses a
+shareable **Darwinian Mind Card** to turn that memory into discovery reports and
+tailored application materials.
 
 Project version: [`0.1`](VERSION). The embedded card has its own independently versioned release line.
 
-> Full spec: [.jg/prd-career-planner-card.md](.jg/prd-career-planner-card.md)
+Start with the [User Guide](USER_GUIDE.md) if you want to use the project. The
+full product spec lives in [.jg/prd-career-planner-card.md](.jg/prd-career-planner-card.md).
 
 ## The model — `state · goal · action`
 
@@ -17,6 +21,26 @@ Project version: [`0.1`](VERSION). The embedded card has its own independently v
 1. **Info Retrieval** — grow your **state + goal** by **uploading** documents (CV, SOP) or being **interviewed**. Refine/enrich only; on conflict the card asks you to clarify.
 2. **Finder (PI Finder, v1)** — name a **target school**; the card deep-researches **PIs / labs** there ranked by topical + belief + **goal** fit. → `action/discovery/`
 3. **Alignment** — paste a **target URL**; the card generates a tailored **CV + SOP** grounded strictly in your `state`, output as **LaTeX → PDF**. → `action/applications/<slug>/`
+
+## Quickstart
+
+```bash
+git clone --recurse-submodules https://github.com/junggyubae/career-planner.git
+cd career-planner
+drwn card clone --allow-untrusted-source git+https://github.com/junggyubae/career-planner-card.git#v0.2.4
+drwn write
+```
+
+Then open the project in Codex and ask for one of the workflows:
+
+```text
+Interview me to enrich my beliefs
+Find PIs at Stanford
+Tailor an application for this URL: ...
+```
+
+Alignment requires `pdflatex` to build PDFs. On macOS with MacTeX, Codex may need
+`/Library/TeX/texbin` on `PATH`.
 
 ## Layout
 
@@ -39,7 +63,7 @@ career-planner/
 └── .jg/                      # planning docs (PRD)
 ```
 
-### Inside `state/` — the interview-derived self-knowledge
+## What Makes It Personal
 
 `identity.md` and `experience/` are facts pulled from your CV. The other two are the **self-knowledge** the card leans on hardest — usually captured through the Info-Retrieval *interview*, not an upload:
 
@@ -48,7 +72,7 @@ career-planner/
 
 Together they answer *what excites me* and *what I stand for* — the difference between a generic CV and materials that sound like a specific person. (Where you're heading lives in `goal/`.)
 
-## Card as a submodule
+## Card And Versions
 
 The shareable card lives in its own repo — [junggyubae/career-planner-card](https://github.com/junggyubae/career-planner-card) — and is pinned here as a git submodule at `card/`. This keeps the card independently versioned and publishable while this repo holds your private memory.
 
@@ -61,15 +85,15 @@ git submodule update --init --recursive
 git -C card fetch --tags && git -C card checkout v0.2.4 && git add card && git commit -m "Bump card"
 ```
 
-## Privacy model
+## Privacy
 
 - **The card is shareable.** The submodule carries only skills + non-personal default templates, so it can be published/cloned via Darwinian (`drwn card clone git+…`).
 - **Your data is private.** `state/`, `goal/`, and `action/` are git-ignored — your identity, experience, interests, beliefs, goals, and applications never leave your machine.
 
-Requires `pdflatex` for PDF compilation (the card still emits `.tex` if it's missing).
+Before pushing, run the privacy checks in [RELEASE.md](RELEASE.md).
 
-## Release checklist
+## Docs
 
-Before publishing a new version, run the short release and smoke-test checklist in
-[`RELEASE.md`](RELEASE.md). The checklist verifies the card pin, generated skills,
-privacy boundary, and the three core workflows.
+- [USER_GUIDE.md](USER_GUIDE.md) — setup, workflows, outputs, and troubleshooting
+- [RELEASE.md](RELEASE.md) — maintainer checklist for version bumps and smoke tests
+- [card/README.md](card/README.md) — reusable card details
