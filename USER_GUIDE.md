@@ -175,6 +175,29 @@ highlight: Mentored students through teaching, outreach, and research activities
 ---
 ```
 
+The YAML frontmatter is only the index. It should contain fields that need to be
+sorted, summarized, or matched. Put richer details in the Markdown body:
+
+```md
+## Summary
+One paragraph overview.
+
+## Responsibilities
+- What you did.
+
+## Technical Work
+- Methods, tools, systems, papers, or experiments.
+
+## Outcomes
+- Results, artifacts, presentations, publications, or impact.
+
+## Reflection
+What this experience says about your interests, values, or goals.
+
+## Source
+- `state/uploads/...`
+```
+
 `state/TIMELINE.md` is generated from experience frontmatter. Timeline entries
 should be reverse-chronological and link back to their source experience files.
 
