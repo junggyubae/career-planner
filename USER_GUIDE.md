@@ -47,7 +47,7 @@ On Debian or Ubuntu:
 
 ```bash
 sudo apt-get update
-sudo apt-get install -y git curl nodejs npm texlive-latex-base texlive-latex-recommended texlive-latex-extra
+sudo apt-get install -y git curl nodejs npm ca-certificates unzip texlive-latex-base texlive-latex-recommended texlive-latex-extra
 curl -fsSL https://bun.sh/install | bash
 npm install -g darwinian-minds
 ```
@@ -340,6 +340,14 @@ local Darwinian store:
 
 ```bash
 drwn card clone --allow-untrusted-source git+https://github.com/junggyubae/career-planner-card.git#v0.2.4
+drwn write
+```
+
+If `drwn write` reports a corrupt card store after moving the repo between
+machines, refresh the local lock and write again:
+
+```bash
+drwn card update
 drwn write
 ```
 

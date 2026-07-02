@@ -17,14 +17,15 @@ action/**
 !action/**/README.md
 
 # Darwinian Minds — generated / materialized state (regenerate with `drwn write`).
-# The pins (.agents/drwn/config.json + card.lock) ARE tracked, below is derived.
+# The portable pin is tracked in .agents/drwn/config.json. The lock contains
+# machine-specific store paths, so each user should generate it locally.
 /.claude/
 /.codex/
 /.cursor/
 /.mcp.json
+/.agents/skills/
 /.agents/drwn/*
 !/.agents/drwn/config.json
-!/.agents/drwn/card.lock
 
 # LaTeX build artifacts
 *.aux

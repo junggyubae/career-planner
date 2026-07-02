@@ -33,6 +33,8 @@ test -d .claude/skills/alignment
 ```
 
 Generated folders are local workspace material and should remain ignored by Git.
+The local `.agents/drwn/card.lock` file contains machine-specific store paths and
+should not be committed.
 
 ## 3. Verify the privacy boundary
 
@@ -50,6 +52,7 @@ Before pushing, confirm private files are ignored:
 - `action/discovery/*`
 - `action/applications/*`
 - generated `.codex/`, `.claude/`, `.cursor/`, and `.mcp.json`
+- `.agents/drwn/card.lock`
 
 Only skeleton docs, card pins, and non-personal card logic should be tracked.
 
