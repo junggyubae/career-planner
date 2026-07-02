@@ -1,4 +1,8 @@
-# state/uploads/ — raw files you feed in
+# state/uploads/ — raw files uploaded in chat
 
-CVs, SOPs, transcripts, and your own CV/SOP LaTeX templates. Info-Retrieval refines their
-facts into `state/`; Alignment uses a template from here if present, else the card default.
+Upload CVs, resumes, SOPs, transcripts, research statements, or CV/SOP LaTeX
+templates in chat. Info Retrieval saves the originals here, then refines grounded
+facts into `state/` and `goal/`.
+
+Alignment uses a user template from here if present; otherwise it uses the card
+default.

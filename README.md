@@ -52,6 +52,7 @@ drwn write
 Then open the project in Codex and ask for one of the workflows:
 
 ```text
+I uploaded my CV and transcript. Import them into my career state.
 Interview me to enrich my beliefs
 Find PIs at Stanford
 Tailor an application for this URL: ...
@@ -73,7 +74,7 @@ career-planner/
 │   ├── experience/           #   one file per item (frontmatter) → derived TIMELINE.md
 │   ├── interests.md          #   what pulls you — research/career interests & open questions
 │   ├── beliefs.md            #   your core identity — values + how you act on them; drives action
-│   └── uploads/              #   raw CV/SOP + your own templates
+│   └── uploads/              #   raw uploaded docs + your own templates
 ├── goal/                     # PRIVATE — goals.md (short / mid / long-term)
 ├── action/                   # PRIVATE — git-ignored (what you do)
 │   ├── discovery/            #   Finder reports
@@ -83,7 +84,10 @@ career-planner/
 
 ## What Makes It Personal
 
-`identity.md` and `experience/` are facts pulled from your CV. The other two are the **self-knowledge** the card leans on hardest — usually captured through the Info-Retrieval *interview*, not an upload:
+`identity.md` and `experience/` are facts pulled from uploaded documents such as
+CVs, transcripts, SOPs, and resumes. The other two are the **self-knowledge** the
+card leans on hardest — usually captured through the Info-Retrieval *interview*,
+not an upload:
 
 - **`interests.md` — what pulls you.** The topics, problems, and open questions you're drawn to (e.g. "efficient inference", "training dynamics of RNNs"). **Finder** matches these against a lab's research to judge *topical* fit, and **Alignment** uses them to argue why a target excites you.
 - **`beliefs.md` — your core identity.** Your values *and how you act on them* — what you optimize for, the principles behind your choices, the environment you want (mentorship, culture, pace), and your non-negotiables. In a world where facts and syntheses are cheap to generate, this is the **irreducibly human part** of you — so it's the anchor the card invests in most. **Finder** ranks labs on values/culture fit beyond topic; **Alignment** makes your SOP *sound like you* and argues genuine fit. Worth the most interview time.

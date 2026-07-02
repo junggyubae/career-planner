@@ -110,11 +110,21 @@ non-negotiables, and the environments where you do your best work.
 Use the **Info Retrieval** workflow when you want to add or refine your private
 career memory.
 
-For uploads:
+For documents, upload the files directly in chat, then ask Career Planner to
+import them:
 
 ```text
-Use my uploaded CV to update my state
+I uploaded my CV and transcript. Import them into my career state.
+I uploaded my SOP draft. Save it and extract any useful state or goal facts.
 ```
+
+The agent should save the original files under `state/uploads/`, keep them
+untouched, extract grounded facts, and route those facts into `state/` and
+`goal/`. Typical uploaded files include CVs, resumes, transcripts, SOP drafts,
+research statements, and LaTeX CV/SOP templates.
+
+LaTeX templates are treated specially: they stay in `state/uploads/` for
+Alignment to use later, rather than being extracted as experience.
 
 For interviews:
 
