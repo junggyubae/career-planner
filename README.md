@@ -24,6 +24,24 @@ full product spec lives in [.jg/prd-career-planner-card.md](.jg/prd-career-plann
 
 ## Quickstart
 
+Install the required local tools:
+
+```bash
+# macOS with Homebrew
+brew install git bun node
+npm install -g darwinian-harness
+brew install --cask mactex-no-gui
+```
+
+Verify the commands are available:
+
+```bash
+drwn status
+command -v pdflatex || test -x /Library/TeX/texbin/pdflatex
+```
+
+Then clone and materialize the agent skills:
+
 ```bash
 git clone --recurse-submodules https://github.com/junggyubae/career-planner.git
 cd career-planner

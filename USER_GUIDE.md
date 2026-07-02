@@ -6,7 +6,55 @@ opportunities, and generate tailored application materials from that memory.
 The project is designed for Codex. The repo stores the workspace shape; the
 `card/` submodule stores the reusable agent skills.
 
-## 1. Install And Open
+## 1. Install The CLI Tools
+
+Career Planner expects a few local command-line tools.
+
+| Tool | Why it is needed |
+|------|------------------|
+| `git` | Clone the repo and fetch the card submodule |
+| `bun` | Runtime used by the `drwn` CLI package |
+| `node` / `npm` | Install `darwinian-harness`, which provides `drwn` |
+| `drwn` | Materialize the card skills into Codex and Claude folders |
+| `pdflatex` | Compile tailored CV/SOP `.tex` files into PDFs |
+
+On macOS with Homebrew:
+
+```bash
+brew install git bun node
+npm install -g darwinian-harness
+brew install --cask mactex-no-gui
+```
+
+If you already have MacTeX installed, you may not need the `mactex-no-gui`
+install. The binary is often available at `/Library/TeX/texbin/pdflatex`.
+
+On Debian or Ubuntu:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y git curl nodejs npm texlive-latex-base texlive-latex-recommended texlive-latex-extra
+curl -fsSL https://bun.sh/install | bash
+npm install -g darwinian-harness
+```
+
+After installing Bun with the shell script, restart your terminal or source your
+shell profile so `bun` is on `PATH`.
+
+Verify the tools:
+
+```bash
+git --version
+bun --version
+npm --version
+drwn status
+command -v pdflatex || test -x /Library/TeX/texbin/pdflatex
+```
+
+`pdflatex` is only required for the final PDF build in Alignment. You can still
+build state, run Finder, and generate `.tex` drafts without it.
+
+## 2. Install And Open The Project
 
 Clone the project with its card submodule:
 
@@ -35,7 +83,7 @@ Open the repo in Codex. The generated `.codex/skills/` folder should include:
 - `finder`
 - `alignment`
 
-## 2. Understand The Workspace
+## 3. Understand The Workspace
 
 Career Planner is organized around `state · goal · action`.
 
@@ -57,7 +105,7 @@ The most important files you will gradually build are:
 `state/beliefs.md` is especially important. It captures values, working style,
 non-negotiables, and the environments where you do your best work.
 
-## 3. Build Your State
+## 4. Build Your State
 
 Use the **Info Retrieval** workflow when you want to add or refine your private
 career memory.
@@ -96,7 +144,7 @@ highlight: Mentored students through teaching, outreach, and research activities
 `state/TIMELINE.md` is generated from experience frontmatter. Timeline entries
 should be reverse-chronological and link back to their source experience files.
 
-## 4. Discover PIs And Labs
+## 5. Discover PIs And Labs
 
 Use **Finder** when you have a target school or institution.
 
@@ -122,7 +170,7 @@ Good Finder output should include:
 - A current-affiliation verification note
 - Recent activity or recruiting signal when visible
 
-## 5. Generate Application Materials
+## 6. Generate Application Materials
 
 Use **Alignment** when you have a specific target URL, such as a lab, internship,
 job, fellowship, or program page.
@@ -147,7 +195,7 @@ action/applications/<target-slug>/
 The CV must be strictly one page. The SOP should use your real experience,
 beliefs, and goals; it should not invent facts to satisfy the target.
 
-## 6. PDF Requirements
+## 7. PDF Requirements
 
 Alignment uses `pdflatex` to build PDFs. Check availability with:
 
@@ -165,7 +213,7 @@ export PATH="/Library/TeX/texbin:$PATH"
 If `pdflatex` is unavailable, Alignment can still produce `.tex` files, but the
 release-quality deliverable is a built PDF.
 
-## 7. Privacy Rules
+## 8. Privacy Rules
 
 The private files are intentionally ignored by Git. Before pushing, run:
 
@@ -186,7 +234,26 @@ Do not push:
 The public repository should contain structure, docs, card pins, and non-personal
 card logic only.
 
-## 8. Troubleshooting
+## 9. Troubleshooting
+
+If `drwn` is missing:
+
+```bash
+npm install -g darwinian-harness
+drwn status
+```
+
+If `drwn` reports that `bun` is missing, install Bun and restart your shell:
+
+```bash
+brew install bun
+```
+
+or:
+
+```bash
+curl -fsSL https://bun.sh/install | bash
+```
 
 If Codex does not see the skills, run:
 
@@ -216,7 +283,7 @@ If Alignment fails to build PDFs, check:
 - Non-Latin characters were translated or romanized
 - The CV has been tightened to one page
 
-## 9. Maintainer Notes
+## 10. Maintainer Notes
 
 The root project version is in `VERSION`. The reusable card version is in
 `card/card.json` and the card repo's git tags.
