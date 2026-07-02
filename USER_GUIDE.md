@@ -29,6 +29,20 @@ brew install --cask mactex-no-gui
 If you already have MacTeX installed, you may not need the `mactex-no-gui`
 install. The binary is often available at `/Library/TeX/texbin/pdflatex`.
 
+On Windows 10/11 with PowerShell and winget:
+
+```powershell
+winget install -e --id Git.Git
+winget install -e --id OpenJS.NodeJS.LTS
+powershell -c "irm bun.sh/install.ps1|iex"
+npm install -g darwinian-harness
+winget install -e --id MiKTeX.MiKTeX
+```
+
+Restart PowerShell after installing so new `PATH` entries are available. MiKTeX
+can install missing LaTeX packages on demand; allow that prompt if Alignment asks
+for a package during the first PDF build.
+
 On Debian or Ubuntu:
 
 ```bash
@@ -49,6 +63,16 @@ bun --version
 npm --version
 drwn status
 command -v pdflatex || test -x /Library/TeX/texbin/pdflatex
+```
+
+On Windows, use:
+
+```powershell
+git --version
+bun --version
+npm --version
+drwn status
+pdflatex --version
 ```
 
 `pdflatex` is only required for the final PDF build in Alignment. You can still
@@ -264,6 +288,14 @@ or:
 ```bash
 curl -fsSL https://bun.sh/install | bash
 ```
+
+On Windows:
+
+```powershell
+powershell -c "irm bun.sh/install.ps1|iex"
+```
+
+Then restart PowerShell and run `bun --version`.
 
 If Codex does not see the skills, run:
 

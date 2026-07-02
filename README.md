@@ -33,11 +33,30 @@ npm install -g darwinian-harness
 brew install --cask mactex-no-gui
 ```
 
+```powershell
+# Windows PowerShell with winget
+winget install -e --id Git.Git
+winget install -e --id OpenJS.NodeJS.LTS
+powershell -c "irm bun.sh/install.ps1|iex"
+npm install -g darwinian-harness
+winget install -e --id MiKTeX.MiKTeX
+```
+
 Verify the commands are available:
 
 ```bash
 drwn status
 command -v pdflatex || test -x /Library/TeX/texbin/pdflatex
+```
+
+On Windows, restart PowerShell after installing, then verify with:
+
+```powershell
+git --version
+bun --version
+npm --version
+drwn status
+pdflatex --version
 ```
 
 Then clone and materialize the agent skills:
