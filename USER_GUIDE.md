@@ -14,7 +14,7 @@ Career Planner expects a few local command-line tools.
 |------|------------------|
 | `git` | Clone the repo and fetch the card submodule |
 | `bun` | Runtime used by the `drwn` CLI package |
-| `node` / `npm` | Install `darwinian-harness`, which provides `drwn` |
+| `node` / `npm` | Install `darwinian-minds`, which provides `drwn` |
 | `drwn` | Materialize the card skills into Codex and Claude folders |
 | `pdflatex` | Compile tailored CV/SOP `.tex` files into PDFs |
 
@@ -22,7 +22,7 @@ On macOS with Homebrew:
 
 ```bash
 brew install git bun node
-npm install -g darwinian-harness
+npm install -g darwinian-minds
 brew install --cask mactex-no-gui
 ```
 
@@ -35,7 +35,7 @@ On Windows 10/11 with PowerShell and winget:
 winget install -e --id Git.Git
 winget install -e --id OpenJS.NodeJS.LTS
 powershell -c "irm bun.sh/install.ps1|iex"
-npm install -g darwinian-harness
+npm install -g darwinian-minds
 winget install -e --id MiKTeX.MiKTeX
 ```
 
@@ -49,7 +49,7 @@ On Debian or Ubuntu:
 sudo apt-get update
 sudo apt-get install -y git curl nodejs npm texlive-latex-base texlive-latex-recommended texlive-latex-extra
 curl -fsSL https://bun.sh/install | bash
-npm install -g darwinian-harness
+npm install -g darwinian-minds
 ```
 
 After installing Bun with the shell script, restart your terminal or source your
@@ -298,7 +298,7 @@ card logic only.
 If `drwn` is missing:
 
 ```bash
-npm install -g darwinian-harness
+npm install -g darwinian-minds
 drwn status
 ```
 

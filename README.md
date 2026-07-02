@@ -29,7 +29,7 @@ Install the required local tools:
 ```bash
 # macOS with Homebrew
 brew install git bun node
-npm install -g darwinian-harness
+npm install -g darwinian-minds
 brew install --cask mactex-no-gui
 ```
 
@@ -38,7 +38,7 @@ brew install --cask mactex-no-gui
 winget install -e --id Git.Git
 winget install -e --id OpenJS.NodeJS.LTS
 powershell -c "irm bun.sh/install.ps1|iex"
-npm install -g darwinian-harness
+npm install -g darwinian-minds
 winget install -e --id MiKTeX.MiKTeX
 ```
 
