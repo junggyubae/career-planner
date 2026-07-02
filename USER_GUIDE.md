@@ -101,7 +101,9 @@ drwn card clone --allow-untrusted-source git+https://github.com/junggyubae/caree
 drwn write
 ```
 
-Open the repo in Codex. The generated `.codex/skills/` folder should include:
+Open the cloned `career-planner/` folder as a Codex workspace, then start a new
+Codex thread from that repo root. The generated `.codex/skills/` folder should
+include:
 
 - `info-retrieval`
 - `finder`

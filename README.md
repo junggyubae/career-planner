@@ -5,7 +5,7 @@ research step. It keeps your private career memory on your machine, then uses a
 shareable **Darwinian Mind Card** to turn that memory into discovery reports and
 tailored application materials.
 
-Project version: [`0.1`](VERSION). The embedded card has its own independently versioned release line.
+Project version: [`0.2`](VERSION). The embedded card has its own independently versioned release line.
 
 Start with the [User Guide](USER_GUIDE.md) if you want to use the project. The
 full product spec lives in [.jg/prd-career-planner-card.md](.jg/prd-career-planner-card.md).
@@ -68,7 +68,8 @@ drwn card clone --allow-untrusted-source git+https://github.com/junggyubae/caree
 drwn write
 ```
 
-Then open the project in Codex and ask for one of the workflows:
+Then open the cloned `career-planner/` folder as a Codex workspace and start a
+new Codex thread from that repo root. Ask for one of the workflows:
 
 ```text
 I uploaded my CV and transcript. Import them into my career state.

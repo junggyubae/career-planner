@@ -1,6 +1,6 @@
 # PRD: Career Planner — Darwinian Mind Card
 
-**Status:** Draft · **Project:** `career-planner@0.1` · **Card:** `@junggyubae/career-planner-card@0.2.4`
+**Status:** Draft · **Project:** `career-planner@0.2` · **Card:** `@junggyubae/career-planner-card@0.2.4`
 **Owner:** dev@greekwaters.io
 **Last updated:** 2026-07-02
 **Runtime:** Darwinian Mind Card running in Codex-first local agent workflows (also materializes Claude-compatible skills)
