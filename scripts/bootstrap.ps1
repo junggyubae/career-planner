@@ -3,7 +3,7 @@ $ErrorActionPreference = "Stop"
 $Root = Resolve-Path (Join-Path $PSScriptRoot "..")
 Set-Location $Root
 
-$CardTag = if ($env:CAREER_PLANNER_CARD_TAG) { $env:CAREER_PLANNER_CARD_TAG } else { "v0.2.6" }
+$CardTag = if ($env:CAREER_PLANNER_CARD_TAG) { $env:CAREER_PLANNER_CARD_TAG } else { "v0.2.7" }
 $CardSource = "git+https://github.com/junggyubae/career-planner-card.git#$CardTag"
 
 function Say($Message) {

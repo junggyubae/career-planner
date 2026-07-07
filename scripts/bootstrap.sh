@@ -4,7 +4,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
-CARD_TAG="${CAREER_PLANNER_CARD_TAG:-v0.2.6}"
+CARD_TAG="${CAREER_PLANNER_CARD_TAG:-v0.2.7}"
 CARD_SOURCE="git+https://github.com/junggyubae/career-planner-card.git#${CARD_TAG}"
 
 say() {

@@ -63,7 +63,7 @@ If you already cloned the repo and only need to refresh the generated skills:
 
 ```bash
 git submodule update --init --recursive
-npx --yes --package darwinian-minds@latest drwn card clone --allow-untrusted-source git+https://github.com/junggyubae/career-planner-card.git#v0.2.6
+npx --yes --package darwinian-minds@latest drwn card clone --allow-untrusted-source git+https://github.com/junggyubae/career-planner-card.git#v0.2.7
 npx --yes --package darwinian-minds@latest drwn write
 ```
 
@@ -361,7 +361,7 @@ If `drwn write` cannot resolve the card version, clone the exact git tag into th
 local Darwinian store:
 
 ```bash
-npx --yes --package darwinian-minds@latest drwn card clone --allow-untrusted-source git+https://github.com/junggyubae/career-planner-card.git#v0.2.6
+npx --yes --package darwinian-minds@latest drwn card clone --allow-untrusted-source git+https://github.com/junggyubae/career-planner-card.git#v0.2.7
 npx --yes --package darwinian-minds@latest drwn write
 ```
 
