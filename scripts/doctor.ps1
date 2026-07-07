@@ -3,6 +3,11 @@ $ErrorActionPreference = "Continue"
 $Root = Resolve-Path (Join-Path $PSScriptRoot "..")
 Set-Location $Root
 
+$BunBin = Join-Path $HOME ".bun\bin"
+if (Test-Path (Join-Path $BunBin "bun.exe")) {
+  $env:PATH = "$BunBin;$env:PATH"
+}
+
 function Check-Command($Command) {
   $Found = Get-Command $Command -ErrorAction SilentlyContinue
   if ($Found) {

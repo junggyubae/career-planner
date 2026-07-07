@@ -4,6 +4,10 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
+if [ -x "$HOME/.bun/bin/bun" ]; then
+  export PATH="$HOME/.bun/bin:$PATH"
+fi
+
 check_cmd() {
   if command -v "$1" >/dev/null 2>&1; then
     printf "ok   %s: %s\n" "$1" "$(command -v "$1")"
