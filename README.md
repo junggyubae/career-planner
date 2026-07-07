@@ -30,13 +30,50 @@ The agent should handle Git, Bun, Darwinian, and skill setup for you.
 
 ## Use It
 
-After setup, ask:
+After setup, start one task at a time.
+
+### Import Documents
 
 ```text
 I uploaded my CV and transcript. Import them into my career state.
+```
+
+```text
+I uploaded my SOP draft. Save it and extract useful state and goal facts.
+```
+
+### Build Self-Knowledge
+
+```text
 Interview me to enrich my beliefs.
+```
+
+```text
+Interview me about my research interests.
+```
+
+Use the voice feature if you have it. Speaking your experience and beliefs out
+loud is often faster than typing, and it gives you room to challenge yourself,
+notice what feels unclear, and explore more freely.
+
+### Discover Opportunities
+
+```text
 Find PIs at Stanford.
+```
+
+```text
+Find labs at Georgia Tech that fit my state and goals.
+```
+
+### Draft Applications
+
+```text
 Tailor an application for this URL: https://...
+```
+
+```text
+Tailor my CV and SOP for this internship posting: https://...
 ```
 
 ## More
