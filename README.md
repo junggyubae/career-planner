@@ -30,7 +30,8 @@ The agent should handle Git, Bun, Darwinian, and skill setup for you.
 
 ## Use It
 
-After setup, start one task at a time.
+After setup, start one task at a time. Copy and paste one task command at a time
+into your AI session based on what you want to focus on.
 
 ### Import Documents
 

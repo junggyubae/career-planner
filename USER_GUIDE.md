@@ -128,6 +128,9 @@ import them:
 
 ```text
 I uploaded my CV and transcript. Import them into my career state.
+```
+
+```text
 I uploaded my SOP draft. Save it and extract any useful state or goal facts.
 ```
 
@@ -143,7 +146,13 @@ For interviews:
 
 ```text
 Interview me to enrich my beliefs
+```
+
+```text
 Interview me about my research interests
+```
+
+```text
 Interview me about this experience
 ```
 
@@ -195,9 +204,18 @@ should be reverse-chronological and link back to their source experience files.
 Use **Career Compass** when you want to turn your state, beliefs, interests, and
 goals into a roadmap.
 
+Copy and paste one task command at a time into your AI session based on what you
+want to focus on.
+
 ```text
 Review my career trajectory and recommend next steps.
+```
+
+```text
 Create short-term, mid-term, and long-term goals from my state and beliefs.
+```
+
+```text
 Find the biggest gaps in my profile and suggest what I should do next.
 ```
 
@@ -221,8 +239,14 @@ Good Career Compass output should include:
 
 Use **Finder** when you have a target school or institution.
 
+Copy and paste one task command at a time into your AI session based on what you
+want to focus on.
+
 ```text
 Find PIs at Stanford
+```
+
+```text
 Find labs at MIT that fit my state and goals.
 ```
 
