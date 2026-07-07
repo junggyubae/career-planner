@@ -1,11 +1,11 @@
 # PRD: Career Planner — Darwinian Mind Card
 
-**Status:** Draft · **Project:** `career-planner@0.2` · **Card:** `@junggyubae/career-planner-card@0.2.5`
+**Status:** Draft · **Project:** `career-planner@0.2` · **Card:** `@junggyubae/career-planner-card@0.2.6`
 **Owner:** dev@greekwaters.io
 **Last updated:** 2026-07-02
 **Runtime:** Darwinian Mind Card running in Codex-first local agent workflows (also materializes Claude-compatible skills)
 
-> **Data model (v0.2.5):** `state · goal · action` (see §5). The card is the policy `π(action | state, goal)`. §5 is authoritative.
+> **Data model (v0.2.6):** `state · goal · action` (see §5). The card is the policy `π(action | state, goal)`. §5 is authoritative.
 
 ---
 
@@ -13,23 +13,25 @@
 
 The **Career Planner** is a single **Darwinian Mind Card** that helps a person plan their next career step — with a bias toward academic and research paths (labs, internships, hiring companies). The card bundles a small set of skills that operate over a **file-based career state** stored as markdown inside the repo.
 
-The card does three things (three "blocks"):
+The card does four things (four "blocks"):
 
 1. **Info Retrieval** — build and enrich the user's `state/` and `goal/`, either by importing uploaded documents from chat (CV, SOP, transcript, resume, etc.) or by running a focused **interview** on a topic. Both paths only refine/enrich.
-2. **Finder (PI Finder in v1)** — the user names a **target school/institution**, and the card performs **deep research** to discover **Principal Investigators (PIs) / labs** at that school whose work fits the user's state, beliefs, and goals.
-3. **Alignment** — given a **URL** for a specific target (a lab, an internship, a job), generate a **tailored CV and SOP** grounded in the user's state, beliefs, and goals, output as **LaTeX (`.tex`) compiled to `.pdf`**.
+2. **Career Compass** — review the user's trajectory and produce short-/mid-/long-term goals, next-step recommendations, gaps, awareness notes, and suggested experiments grounded in state, beliefs, and goals.
+3. **Finder (PI Finder in v1)** — the user names a **target school/institution**, and the card performs **deep research** to discover **Principal Investigators (PIs) / labs** at that school whose work fits the user's state, beliefs, and goals.
+4. **Alignment** — given a **URL** for a specific target (a lab, an internship, a job), generate a **tailored CV and SOP** grounded in the user's state, beliefs, and goals, output as **LaTeX (`.tex`) compiled to `.pdf`** when a compiler is available.
 
 The whole system is deliberately simple: no separate app, no database. The **repo is the product**. Career state lives as markdown files that both the human and the agent can read, diff, and version locally.
 
-**Problem it solves:** Career planning is fragmented — your history lives in old CVs, your goals live in your head, and tailoring materials for each opportunity is slow and repetitive. Career Planner centralizes a durable, structured state of who you are and automates the two highest-friction tasks: *finding* the right next step and *aligning* your materials to it.
+**Problem it solves:** Career planning is fragmented — your history lives in old CVs, your goals live in your head, and tailoring materials for each opportunity is slow and repetitive. Career Planner centralizes a durable, structured state of who you are and automates three high-friction tasks: *orienting* your next steps, *finding* the right opportunities, and *aligning* your materials to them.
 
 ---
 
 ## 2. Goals
 
-- Provide **one Mind Card** that exposes three skills over shared, file-based `state/`, `goal/`, and `action/`.
+- Provide **one Mind Card** that exposes four skills over shared, file-based `state/`, `goal/`, and `action/`.
 - Make state **human-readable and hand-editable** — every fact is a markdown file the user can inspect and edit.
 - Let a user grow their state two ways: **chat upload → save to `state/uploads/` → refine**, and **interview → refine/enrich**.
+- Turn state, beliefs, interests, and goals into a grounded **Career Compass** roadmap with next steps, gaps, and suggested experiments.
 - Given a target school, surface **real PIs/labs** via deep research, ranked by fit against the user's state, beliefs, and goals.
 - Generate a **tailored CV and SOP** for any target URL, drawing only from verified state (no fabrication), delivered as **`.tex` + compiled `.pdf`** using the user's template or a bundled default.
 - Keep the state schema **stable and extensible** (identity, experience, uploads, interests, beliefs, goals).
@@ -52,7 +54,7 @@ The whole system is deliberately simple: no separate app, no database. The **rep
 
 ## 4. System Overview
 
-### 4.1 The Card and its three blocks
+### 4.1 The Card and its four blocks
 
 ```mermaid
 flowchart TD
@@ -61,8 +63,9 @@ flowchart TD
     subgraph Card["Career Planner — Mind Card"]
         direction TB
         IR["Block 1: Info Retrieval Skill"]
-        FIND["Block 2: Finder Skill"]
-        ALIGN["Block 3: Alignment Skill"]
+        COMPASS["Block 2: Career Compass Skill"]
+        FIND["Block 3: Finder Skill"]
+        ALIGN["Block 4: Alignment Skill"]
     end
 
     subgraph SG["state/ + goal/ (markdown in repo)"]
@@ -75,8 +78,10 @@ flowchart TD
     end
 
     IR -->|refine / enrich| SG
+    SG -->|reads context| COMPASS
     SG -->|reads context| FIND
     SG -->|reads context| ALIGN
+    COMPASS -->|action/roadmap/ report| U
     FIND -->|action/discovery/ report| U
     ALIGN -->|action/applications/ CV + SOP| U
 
@@ -86,16 +91,16 @@ flowchart TD
 
 ### 4.2 How the blocks relate
 
-- **Info Retrieval writes** to `state/` and `goal/`. **Finder and Alignment read** from them and write to `action/`. This read/write split keeps the source of truth clean.
+- **Info Retrieval writes** to `state/` and `goal/`. **Career Compass, Finder, and Alignment read** from them and write to `action/`. This read/write split keeps the source of truth clean.
 - Info Retrieval has **two entry paths** that both end at enriched state/goal: the **upload path** and the **interview path**. **Both paths refine and enrich** — the interview is not merely appending, it refines existing facts too.
 - The only operations allowed on `state`/`goal` are **refine** and **enrichment**. No skill destructively overwrites or deletes user-authored content.
-- Finder and Alignment never invent facts — they are grounded strictly in what `state` contains.
+- Career Compass, Finder, and Alignment never invent facts — they are grounded strictly in what `state` contains.
 
 ### 4.3 Why a card *and* a repo (the privacy split)
 
 The card and the repo are separated on purpose, along a **shareable vs. private** boundary:
 
-- **The card is shareable.** It bundles only the *logic* — the three skills, the interview scripts, the research/alignment behavior. It carries **no personal data**, so it can be published and reused by anyone via the Darwinian sharing flow.
+- **The card is shareable.** It bundles only the *logic* — the four skills, the interview scripts, roadmap behavior, research behavior, and alignment behavior. It carries **no personal data**, so it can be published and reused by anyone via the Darwinian sharing flow.
 - **The repo's data is private.** `state/`, `goal/`, and `action/` are **git-ignored** so a user never accidentally pushes their CV, SOP, identity, interests, beliefs, goals, or applications to a public remote. The data lives locally with the user.
 
 ```mermaid
@@ -115,9 +120,9 @@ flowchart LR
 
 ---
 
-## 5. Data Design — `state · goal · action` (v0.2.5)
+## 5. Data Design — `state · goal · action` (v0.2.6)
 
-> **v0.2.0 model change (current: v0.2.5).** The earlier `memory/` + `output/` layout was replaced by this RL-shaped model. The card is the **policy** `π(action | state, goal)`. This section is the data model of record.
+> **v0.2.0 model change (current: v0.2.6).** The earlier `memory/` + `output/` layout was replaced by this RL-shaped model. The card is the **policy** `π(action | state, goal)`. This section is the data model of record.
 
 Every fact is a markdown file so it is diffable, greppable, and editable by hand. Structured items carry **YAML frontmatter**, and indexes are **derived** (regenerated by the agent), never hand-maintained.
 
@@ -137,6 +142,8 @@ flowchart TD
     G --> GO["goals.md<br/>(short / mid / long-term)"]
 
     A["action/  (a — what you do)"]
+    A --> ROAD["roadmap/<br/>YYYY-MM-DD-career-compass.md"]
+    A --> RDX["ROADMAP.md<br/>(DERIVED index)"]
     A --> DIS["discovery/<br/>&lt;school&gt;-&lt;date&gt;.md (Finder)"]
     A --> APP["applications/&lt;slug&gt;/<br/>target.md + cv.* + sop.* + notes.md"]
     A --> BRD["applications/BOARD.md<br/>(DERIVED, grouped by status)"]
@@ -146,20 +153,22 @@ flowchart TD
 
 | Path | Contents | Written by | Read by |
 |------|----------|------------|---------|
-| `state/identity.md` | name, contact, homepage, GitHub, LinkedIn, IDs, current status | Info Retrieval | Finder, Alignment |
-| `state/experience/*.md` | one frontmatter-dated file per item | Info Retrieval | Finder, Alignment |
-| `state/TIMELINE.md` | time-ordered index — **derived** from frontmatter | Info Retrieval (regenerates) | humans, Finder, Alignment |
-| `state/interests.md` | research/career interests | Info Retrieval | Finder, Alignment |
-| `state/beliefs.md` | **values + how you act on them — the core identity** | Info Retrieval | **Finder (values/culture fit)** + **Alignment (SOP voice + fit)** |
+| `state/identity.md` | name, contact, homepage, GitHub, LinkedIn, IDs, current status | Info Retrieval | Career Compass, Finder, Alignment |
+| `state/experience/*.md` | one frontmatter-dated file per item | Info Retrieval | Career Compass, Finder, Alignment |
+| `state/TIMELINE.md` | time-ordered index — **derived** from frontmatter | Info Retrieval (regenerates) | humans, Career Compass, Finder, Alignment |
+| `state/interests.md` | research/career interests | Info Retrieval | Career Compass, Finder, Alignment |
+| `state/beliefs.md` | **values + how you act on them — the core identity** | Info Retrieval | **Career Compass (trajectory + gaps)** + **Finder (values/culture fit)** + **Alignment (SOP voice + fit)** |
 | `state/uploads/` | raw uploaded docs + user's own template | Info Retrieval | Info Retrieval, Alignment (template) |
-| `goal/goals.md` | short / mid / long-term goals | Info Retrieval | **Finder** (direction) + **Alignment** (trajectory) |
+| `goal/goals.md` | short / mid / long-term goals | Info Retrieval | **Career Compass** (roadmap) + **Finder** (direction) + **Alignment** (trajectory) |
+| `action/roadmap/*.md` | Career Compass reports | Career Compass | humans |
+| `action/ROADMAP.md` | roadmap index — **derived**, reverse chronological | Career Compass (regenerates) | humans |
 | `action/discovery/*.md` | Finder PI/lab reports | Finder | humans |
 | `action/applications/<slug>/` | `target.md` (+frontmatter/status), `cv.*`, `sop.*`, `notes.md` | Alignment | humans |
 | `action/applications/BOARD.md` | pipeline index — **derived**, grouped by `status` | Alignment (regenerates) | humans |
 
 ### 5.3 Derived indexes (no drift)
 
-`state/TIMELINE.md` and `action/applications/BOARD.md` are **generated** from the frontmatter of the underlying files — never a second hand-maintained source of truth. Timeline entries link back to their source `state/experience/*.md` files. This removes the drift risk of the old `_manager.md` spine: edit or add a file, regenerate the index.
+`state/TIMELINE.md`, `action/ROADMAP.md`, and `action/applications/BOARD.md` are **generated** from the underlying files — never a second hand-maintained source of truth. Timeline entries link back to their source `state/experience/*.md` files. This removes the drift risk of the old `_manager.md` spine: edit or add a file, regenerate the index.
 
 ### 5.4 Experience file body
 
@@ -198,7 +207,24 @@ flowchart TD
 
 **Interview path:** the user wants to say more about a topic. The card **generates a list of focused questions on the fly** (no fixed bank, adapted to what's already in `state`/`goal`), the user answers the ones they want, and the card **iterates** with follow-ups. Answers **refine and enrich** the relevant file — beliefs being the topic to probe deepest. Both paths perform only refine/enrichment; neither destroys prior content.
 
-### 6.2 Block 2 — Finder (PI Finder, deep research)
+### 6.2 Block 2 — Career Compass (trajectory roadmap)
+
+```mermaid
+flowchart LR
+    S([User invokes Career Compass]) --> R1[Read state/ + goal/:<br/>identity, experience,<br/>interests, beliefs, goals]
+    R1 --> R2[Read recent action/:<br/>discovery reports + application targets]
+    R2 --> R3[Summarize current trajectory<br/>grounded in existing files]
+    R3 --> R4[Create gentle readiness map:<br/>emerging / forming / clear / strong]
+    R4 --> R5[Recommend short-, mid-,<br/>and long-term goals]
+    R5 --> R6[List next steps, gaps,<br/>awareness notes, experiments]
+    R6 --> R7[Write action/roadmap/<br/>YYYY-MM-DD-career-compass.md]
+    R7 --> R8[Regenerate action/ROADMAP.md]
+    R8 --> Out([Roadmap delivered to user])
+```
+
+**v1 behavior:** the user asks for a trajectory review, next steps, short-/mid-/long-term goals, or gap analysis. Career Compass reads `state/`, `goal/`, and recent `action/` artifacts, then writes a grounded roadmap under `action/roadmap/`. It uses a gentle map-style rubric — `emerging`, `forming`, `clear`, `strong` — rather than a numeric score.
+
+### 6.3 Block 3 — Finder (PI Finder, deep research)
 
 ```mermaid
 flowchart LR
@@ -216,7 +242,7 @@ flowchart LR
 
 **Phase 2 (noted, out of scope now):** internships and company/industry roles, school-less open discovery, structured source integrations (job boards, lab directories), saved searches, and periodic re-runs.
 
-### 6.3 Block 3 — Alignment (URL → tailored CV + SOP)
+### 6.4 Block 4 — Alignment (URL → tailored CV + SOP)
 
 ```mermaid
 flowchart LR
@@ -239,7 +265,7 @@ flowchart LR
 
 **v1 behavior:** the user pastes a URL for a specific target. Alignment first resolves the **template** (user's own from `state/uploads/`, else the bundled default), fetches and analyzes the target, matches it against `state`, and renders a **tailored CV and SOP as LaTeX**. It **compiles with the lightest available compiler (`tectonic` first, `pdflatex` fallback), auto-iterating on errors until the PDF builds when a compiler is available**, and **enforces a strictly one-page CV** (trim + tighten + recompile). Everything is grounded in `state` — **no fabricated experience**. The SOP leans on `beliefs` and `goals` to sound like the user and argue fit. Output lands in `action/applications/<slug>/`.
 
-### 6.4 End-to-end sequence (typical first session)
+### 6.5 End-to-end sequence (typical first session)
 
 ```mermaid
 sequenceDiagram
@@ -255,6 +281,10 @@ sequenceDiagram
     Card->>User: LLM-generated list of focused questions
     User->>Card: Answers (iterates with follow-ups)
     Card->>Data: Refine/enrich state/beliefs.md
+
+    User->>Card: "Review my career trajectory"
+    Card->>Data: Read state/ + goal/ + recent action/
+    Card-->>User: Roadmap → action/roadmap/
 
     User->>Card: Run Finder for "Stanford"
     Card->>Data: Read state/ + goal/
@@ -276,17 +306,17 @@ sequenceDiagram
 **Acceptance Criteria:**
 - [ ] `state/` contains skeleton READMEs for identity, experience, uploads, interests, and beliefs.
 - [ ] `goal/` contains a skeleton README for goals.
-- [ ] `action/` contains skeleton READMEs for discovery and applications.
-- [ ] `state/TIMELINE.md` and `action/applications/BOARD.md` are documented as derived indexes, not hand-maintained files.
+- [ ] `action/` contains skeleton READMEs for roadmap, discovery, and applications.
+- [ ] `state/TIMELINE.md`, `action/ROADMAP.md`, and `action/applications/BOARD.md` are documented as derived indexes, not hand-maintained files.
 
 ### US-002: Author the Career Planner Mind Card
-**Description:** As a user, I want a single Darwinian Mind Card that registers the three skills so I can invoke the whole system from Codex.
+**Description:** As a user, I want a single Darwinian Mind Card that registers the four skills so I can invoke the whole system from Codex.
 
 **Acceptance Criteria:**
 - [ ] A card source is created via the Darwinian authoring flow
-- [ ] The card bundles three skills: Info Retrieval, Finder, Alignment
+- [ ] The card bundles four skills: Info Retrieval, Career Compass, Finder, Alignment
 - [ ] The card applies cleanly to the project with `drwn write` (materializes skills without errors)
-- [ ] Inspecting the card shows all three skills active
+- [ ] Inspecting the card shows all four skills active
 
 ### US-003: Info Retrieval — upload path
 **Description:** As a user, I want to upload documents in chat and have them saved and refined into state/goals so I do not have to type my history manually.
@@ -312,7 +342,19 @@ sequenceDiagram
 - [ ] `state/TIMELINE.md` is regenerated if an experience changed
 - [ ] Interview ends when the user signals enough depth
 
-### US-005: Finder — PI finder for a target school
+### US-005: Career Compass — trajectory roadmap
+**Description:** As a user, I want a grounded review of my trajectory, goals, gaps, next steps, and things to be aware of.
+
+**Acceptance Criteria:**
+- [ ] Career Compass reads `state/`, `goal/`, and recent `action/` artifacts before writing recommendations
+- [ ] Output uses a gentle readiness map (`emerging`, `forming`, `clear`, `strong`) instead of numeric scores
+- [ ] Output includes short-term, mid-term, and long-term goals grounded in state and beliefs
+- [ ] Output separates what the user should do from what the agent can do next
+- [ ] Output lists suggested experiments, gaps to fill, and things to be aware of
+- [ ] The report is saved to `action/roadmap/YYYY-MM-DD-career-compass.md`
+- [ ] `action/ROADMAP.md` is regenerated as a reverse-chronological index
+
+### US-006: Finder — PI finder for a target school
 **Description:** As a user, I want to name a school and get a ranked list of PIs/labs there that fit me.
 
 **Acceptance Criteria:**
@@ -322,7 +364,7 @@ sequenceDiagram
 - [ ] Each item includes the lab link, PI name, current-affiliation verification, recent activity signal, and a "why it fits" tied to specific state, belief, interest, and goal facts
 - [ ] The report is saved to `action/discovery/<school>-<date>.md`
 
-### US-006: Alignment — tailored CV + SOP from a URL (LaTeX → PDF)
+### US-007: Alignment — tailored CV + SOP from a URL (LaTeX → PDF)
 **Description:** As a user, I want to give a target URL and get a CV and SOP tailored to it, grounded in my state, as polished PDFs.
 
 **Acceptance Criteria:**
@@ -336,7 +378,7 @@ sequenceDiagram
 - [ ] `action/applications/BOARD.md` is regenerated from `target.md` frontmatter
 - [ ] A short "coverage note" flags any target requirement not backed by state
 
-### US-007: Bundle default LaTeX templates
+### US-008: Bundle default LaTeX templates
 **Description:** As a user without my own template, I want a good-looking default CV/SOP so I get a usable PDF out of the box.
 
 **Acceptance Criteria:**
@@ -345,7 +387,7 @@ sequenceDiagram
 - [ ] Templates use clear placeholder fields that Alignment fills from state
 - [ ] Alignment falls back to these when the user has no template in `state/uploads/`
 
-### US-008: State stays private and human-editable
+### US-009: State stays private and human-editable
 **Description:** As a user, I want my state, goals, and actions to be plain, editable files that never get pushed to a public remote.
 
 **Acceptance Criteria:**
@@ -358,28 +400,29 @@ sequenceDiagram
 
 ## 8. Functional Requirements
 
-- **FR-1:** The system must expose exactly one Mind Card that bundles three skills: Info Retrieval, Finder, Alignment.
-- **FR-2:** The system must store structured state/action data as markdown files: `state/` (identity, experience, interests.md, beliefs.md), `goal/` (goals.md), and `action/` (discovery/, applications/). Raw uploaded files remain in their original formats under `state/uploads/`.
+- **FR-1:** The system must expose exactly one Mind Card that bundles four skills: Info Retrieval, Career Compass, Finder, Alignment.
+- **FR-2:** The system must store structured state/action data as markdown files: `state/` (identity, experience, interests.md, beliefs.md), `goal/` (goals.md), and `action/` (roadmap/, discovery/, applications/). Raw uploaded files remain in their original formats under `state/uploads/`.
 - **FR-3:** Info Retrieval must support an **upload path**: the user uploads files in chat, the card saves the raw files to `state/uploads/`, then refines extracted facts into `state/` and `goal/`.
 - **FR-4:** Info Retrieval must support an **interview path**: present a **list of focused questions** on a chosen topic (experience/interests/beliefs/goals — beliefs being the core-identity topic to invest most in), iterate with follow-ups, and refine/enrich the correct file.
 - **FR-5:** Each experience must be a separate markdown file **with frontmatter** and a freeform Markdown body for richer detail; `state/TIMELINE.md` is **derived** from that frontmatter (not hand-maintained) and links each entry to its source file.
-- **FR-6:** Finder must require a **target school**, read `state/` + `goal/`, then run deep research scoped to that school to produce a ranked **PI/lab** report (`action/discovery/`) grounded in state, beliefs, and goal direction.
-- **FR-7:** Alignment must accept a target URL, resolve a template (user-provided from `state/uploads/` or the bundled default), analyze the target, and generate a tailored CV and SOP grounded strictly in `state`, rendered as **`.tex` and compiled to `.pdf`** into `action/applications/<slug>/`; the CV must be exactly one page.
-- **FR-8:** No skill may fabricate facts not present in `state` or the analyzed target; unsupported claims must be flagged, not invented.
-- **FR-9:** The only operations any skill may perform on `state`/`goal` are **refine** and **enrichment**. Destructive overwrite or deletion of user-authored content is not permitted.
-- **FR-10:** `state/`, `goal/`, and `action/` must be git-ignored; the shareable card must contain no personal data.
-- **FR-11:** When Info Retrieval detects a conflict between new input and existing state, it must **stop and ask the user to clarify**; it must not auto-resolve.
-- **FR-12:** The card must ship **default `cv-template.tex` and `sop-template.tex`** (containing no personal data) used when the user has not provided their own template.
+- **FR-6:** Career Compass must read `state/`, `goal/`, and recent `action/` artifacts to produce a grounded roadmap report under `action/roadmap/`, plus a derived `action/ROADMAP.md` index.
+- **FR-7:** Finder must require a **target school**, read `state/` + `goal/`, then run deep research scoped to that school to produce a ranked **PI/lab** report (`action/discovery/`) grounded in state, beliefs, and goal direction.
+- **FR-8:** Alignment must accept a target URL, resolve a template (user-provided from `state/uploads/` or the bundled default), analyze the target, and generate a tailored CV and SOP grounded strictly in `state`, rendered as **`.tex` and compiled to `.pdf`** into `action/applications/<slug>/`; the CV must be exactly one page.
+- **FR-9:** No skill may fabricate facts not present in `state` or the analyzed target; unsupported claims must be flagged, not invented.
+- **FR-10:** The only operations any skill may perform on `state`/`goal` are **refine** and **enrichment**. Destructive overwrite or deletion of user-authored content is not permitted.
+- **FR-11:** `state/`, `goal/`, and `action/` must be git-ignored; the shareable card must contain no personal data.
+- **FR-12:** When Info Retrieval detects a conflict between new input and existing state, it must **stop and ask the user to clarify**; it must not auto-resolve.
+- **FR-13:** The card must ship **default `cv-template.tex` and `sop-template.tex`** (containing no personal data) used when the user has not provided their own template.
 
 ---
 
 ## 9. Technical Considerations
 
 - **Runtime:** Darwinian Mind Card + Codex-first local repo workflow. `drwn write` materializes generated `.codex/skills/` and `.claude/skills/` folders from the card for local agent use.
-- **Card convention (important):** a Darwinian card source is **not** stored inline in the consumer repo. Here the card lives in its **own public git repo** — [`junggyubae/career-planner-card`](https://github.com/junggyubae/career-planner-card) (manifest `card.json`, `skills/`, templates bundled under `skills/alignment/templates/`) — and is pinned into this repo as a **git submodule at `card/`**. This keeps the card independently versioned (currently `v0.2.5`), publicly shareable, and drwn-consumable (`drwn card clone --allow-untrusted-source git+https://github.com/junggyubae/career-planner-card.git#v0.2.5`). **This repo is the *consumer*** (holds private `state/ goal/ action/` + the submodule pointer). Editing flow: change the card repo → tag a release → bump the submodule pointer and `.agents/drwn/config.json` pin here; do not commit `.agents/drwn/card.lock` because it contains machine-specific store paths.
+- **Card convention (important):** a Darwinian card source is **not** stored inline in the consumer repo. Here the card lives in its **own public git repo** — [`junggyubae/career-planner-card`](https://github.com/junggyubae/career-planner-card) (manifest `card.json`, `skills/`, templates bundled under `skills/alignment/templates/`) — and is pinned into this repo as a **git submodule at `card/`**. This keeps the card independently versioned (currently `v0.2.6`), publicly shareable, and drwn-consumable (`drwn card clone --allow-untrusted-source git+https://github.com/junggyubae/career-planner-card.git#v0.2.6`). **This repo is the *consumer*** (holds private `state/ goal/ action/` + the submodule pointer). Editing flow: change the card repo → tag a release → bump the submodule pointer and `.agents/drwn/config.json` pin here; do not commit `.agents/drwn/card.lock` because it contains machine-specific store paths.
 - **No database:** the filesystem is the store. Prefer many small frontmatter-bearing files over few large ones for clean diffs.
-- **Action structure:** `action/` holds `discovery/<school>-<date>.md` (Finder) and `applications/<slug>/` (Alignment: `target.md` + `cv.{tex,pdf}` + `sop.{tex,pdf}` + `notes.md`). `applications/BOARD.md` is a **derived** pipeline index grouped by `status`.
-- **Derived indexes:** `state/TIMELINE.md` and `action/applications/BOARD.md` are generated from frontmatter — never hand-maintained (kills the old `_manager.md` drift).
+- **Action structure:** `action/` holds `roadmap/YYYY-MM-DD-career-compass.md` (Career Compass), `discovery/<school>-<date>.md` (Finder), and `applications/<slug>/` (Alignment: `target.md` + `cv.{tex,pdf}` + `sop.{tex,pdf}` + `notes.md`). `action/ROADMAP.md` and `applications/BOARD.md` are **derived** indexes.
+- **Derived indexes:** `state/TIMELINE.md`, `action/ROADMAP.md`, and `action/applications/BOARD.md` are generated — never hand-maintained (kills the old `_manager.md` drift).
 - **Privacy boundary:** ship a `.gitignore` that excludes `state/`, `goal/`, and `action/` contents from every commit (re-including only READMEs so the *structure* is shareable), so personal data can never be pushed. The repo itself can be public; the card is shared separately via its git-backed Darwinian card release.
 - **Deep research (Finder):** v1 relies on the agent's research/web tooling, scoped to the named school. Keep the research contract (inputs = school + `state`/`goal` profile, output = ranked PI report) stable so Phase-2 targets can slot in behind it.
 - **URL fetching (Alignment):** must degrade gracefully if a target page is unreachable (ask the user to paste the content).
@@ -393,6 +436,7 @@ sequenceDiagram
 ## 10. Success Metrics
 
 - A new user can go **chat upload → saved raw file → enriched state/goal** in a single session with no manual file editing.
+- Career Compass produces a grounded roadmap with short-, mid-, and long-term goals, gaps, and next steps without using a judgmental numeric score.
 - PI Finder returns **≥ 5 relevant, real PIs/labs** at the named school per run when the school has enough matches, each with a state-, belief-, and goal-grounded rationale.
 - Alignment produces a CV + SOP for a given URL where **100% of claims trace to state** (zero fabricated facts), delivered as clean compiled PDFs.
 - State stays **fully human-readable** — a user can open any file and understand/edit it without the card.

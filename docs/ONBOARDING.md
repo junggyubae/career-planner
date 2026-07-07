@@ -14,9 +14,11 @@ Darwinian, or LaTeX.
    Windows.
 2. Verify the generated skills exist:
    - `.codex/skills/info-retrieval`
+   - `.codex/skills/career-compass`
    - `.codex/skills/finder`
    - `.codex/skills/alignment`
    - `.claude/skills/info-retrieval`
+   - `.claude/skills/career-compass`
    - `.claude/skills/finder`
    - `.claude/skills/alignment`
 3. Treat PDF compilation as optional. Tectonic is preferred; `pdflatex` is a
@@ -68,6 +70,7 @@ First-run onboarding is complete when:
 - Raw uploads, if any, are saved in `state/uploads/`.
 - Initial `state/` and `goal/` files exist.
 - The user knows the next available actions:
+  - "Review my career trajectory and recommend next steps"
   - "Find PIs at <school>"
   - "Tailor an application for this URL: <url>"
   - "Interview me more about <topic>"

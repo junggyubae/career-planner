@@ -3,7 +3,7 @@ $ErrorActionPreference = "Stop"
 $Root = Resolve-Path (Join-Path $PSScriptRoot "..")
 Set-Location $Root
 
-$CardTag = if ($env:CAREER_PLANNER_CARD_TAG) { $env:CAREER_PLANNER_CARD_TAG } else { "v0.2.5" }
+$CardTag = if ($env:CAREER_PLANNER_CARD_TAG) { $env:CAREER_PLANNER_CARD_TAG } else { "v0.2.6" }
 $CardSource = "git+https://github.com/junggyubae/career-planner-card.git#$CardTag"
 
 function Say($Message) {
@@ -60,9 +60,11 @@ Run-Drwn write
 Say "Verifying skills"
 $SkillPaths = @(
   ".codex/skills/info-retrieval/SKILL.md",
+  ".codex/skills/career-compass/SKILL.md",
   ".codex/skills/finder/SKILL.md",
   ".codex/skills/alignment/SKILL.md",
   ".claude/skills/info-retrieval/SKILL.md",
+  ".claude/skills/career-compass/SKILL.md",
   ".claude/skills/finder/SKILL.md",
   ".claude/skills/alignment/SKILL.md"
 )

@@ -25,6 +25,8 @@ setup for them. Do not ask the user to run CLI commands unless automation fails.
 
 - Use Info Retrieval when the user uploads documents or wants to be interviewed
   about identity, experience, interests, beliefs, or goals.
+- Use Career Compass when the user wants a trajectory review, short-/mid-/long-term
+  goals, next-step recommendations, gap analysis, or advice on what to do next.
 - Use Finder when the user names a school and wants PI/lab discovery.
 - Use Alignment when the user provides a target URL and wants tailored CV/SOP
   materials.

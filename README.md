@@ -25,7 +25,7 @@ The agent should handle Git, Bun, Darwinian, and skill setup for you.
 - Uploads are saved in `state/uploads/`
 - Career facts go into `state/`
 - Goals go into `goal/`
-- Discovery reports and applications go into `action/`
+- Roadmaps, discovery reports, and applications go into `action/`
 - PDFs are optional: Tectonic is preferred when installed, `pdflatex` is a fallback
 
 ## Use It
@@ -55,6 +55,20 @@ Interview me about my research interests.
 Use the voice feature if you have it. Speaking your experience and beliefs out
 loud is often faster than typing, and it gives you room to challenge yourself,
 notice what feels unclear, and explore more freely.
+
+### Plan Next Steps
+
+```text
+Review my career trajectory and recommend next steps.
+```
+
+```text
+Create short-term, mid-term, and long-term goals from my state and beliefs.
+```
+
+```text
+Find the biggest gaps in my profile and suggest what I should do next.
+```
 
 ### Discover Opportunities
 

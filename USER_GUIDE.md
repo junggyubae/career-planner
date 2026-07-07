@@ -63,7 +63,7 @@ If you already cloned the repo and only need to refresh the generated skills:
 
 ```bash
 git submodule update --init --recursive
-npx --yes --package darwinian-minds@latest drwn card clone --allow-untrusted-source git+https://github.com/junggyubae/career-planner-card.git#v0.2.5
+npx --yes --package darwinian-minds@latest drwn card clone --allow-untrusted-source git+https://github.com/junggyubae/career-planner-card.git#v0.2.6
 npx --yes --package darwinian-minds@latest drwn write
 ```
 
@@ -72,6 +72,7 @@ Codex thread from that repo root. The generated `.codex/skills/` folder should
 include:
 
 - `info-retrieval`
+- `career-compass`
 - `finder`
 - `alignment`
 
@@ -103,7 +104,7 @@ Career Planner is organized around `state · goal · action`.
 |--------|---------|--------------|
 | `state/` | Who you are: identity, experience, interests, beliefs, uploads | Private, git-ignored except skeleton READMEs |
 | `goal/` | Where you are going: short-, mid-, and long-term goals | Private, git-ignored except skeleton README |
-| `action/` | What you do: discovery reports and application bundles | Private, git-ignored except skeleton READMEs |
+| `action/` | What you do: roadmap reports, discovery reports, and application bundles | Private, git-ignored except skeleton READMEs |
 | `card/` | Reusable skills and templates | Public submodule |
 
 The most important files you will gradually build are:
@@ -189,7 +190,34 @@ What this experience says about your interests, values, or goals.
 `state/TIMELINE.md` is generated from experience frontmatter. Timeline entries
 should be reverse-chronological and link back to their source experience files.
 
-## 6. Discover PIs And Labs
+## 6. Plan Next Steps
+
+Use **Career Compass** when you want to turn your state, beliefs, interests, and
+goals into a roadmap.
+
+```text
+Review my career trajectory and recommend next steps.
+Create short-term, mid-term, and long-term goals from my state and beliefs.
+Find the biggest gaps in my profile and suggest what I should do next.
+```
+
+Career Compass writes a grounded report to:
+
+```text
+action/roadmap/YYYY-MM-DD-career-compass.md
+```
+
+Good Career Compass output should include:
+
+- A concise current-trajectory summary
+- A gentle readiness map using stages like `emerging`, `forming`, `clear`, and `strong`
+- Short-term, mid-term, and long-term goals
+- What you should do yourself
+- What the agent can do next
+- Suggested experiments
+- Gaps to fill and things to be aware of
+
+## 7. Discover PIs And Labs
 
 Use **Finder** when you have a target school or institution.
 
@@ -215,7 +243,7 @@ Good Finder output should include:
 - A current-affiliation verification note
 - Recent activity or recruiting signal when visible
 
-## 7. Generate Application Materials
+## 8. Generate Application Materials
 
 Use **Alignment** when you have a specific target URL, such as a lab, internship,
 job, fellowship, or program page.
@@ -241,7 +269,7 @@ If `tectonic` or `pdflatex` is installed, Alignment also writes `cv.pdf` and
 The CV must be strictly one page. The SOP should use your real experience,
 beliefs, and goals; it should not invent facts to satisfy the target.
 
-## 8. PDF Requirements
+## 9. PDF Requirements
 
 Check PDF compiler availability with:
 
@@ -259,7 +287,7 @@ export PATH="/Library/TeX/texbin:$PATH"
 If `pdflatex` is unavailable, Alignment can still produce `.tex` files, but the
 lighter recommended install is Tectonic.
 
-## 9. Privacy Rules
+## 10. Privacy Rules
 
 The private files are intentionally ignored by Git. Before pushing, run:
 
@@ -273,6 +301,7 @@ Do not push:
 - Personal state files
 - Goals
 - Uploaded CVs, transcripts, SOPs, or templates
+- Career Compass roadmap reports
 - Finder reports
 - Application bundles
 - Generated `.codex/`, `.claude/`, `.cursor/`, or `.mcp.json` files
@@ -280,7 +309,7 @@ Do not push:
 The public repository should contain structure, docs, card pins, and non-personal
 card logic only.
 
-## 10. Troubleshooting
+## 11. Troubleshooting
 
 If setup looks stale, run the doctor:
 
@@ -332,7 +361,7 @@ If `drwn write` cannot resolve the card version, clone the exact git tag into th
 local Darwinian store:
 
 ```bash
-npx --yes --package darwinian-minds@latest drwn card clone --allow-untrusted-source git+https://github.com/junggyubae/career-planner-card.git#v0.2.5
+npx --yes --package darwinian-minds@latest drwn card clone --allow-untrusted-source git+https://github.com/junggyubae/career-planner-card.git#v0.2.6
 npx --yes --package darwinian-minds@latest drwn write
 ```
 
@@ -351,7 +380,7 @@ If Alignment fails to build PDFs, check:
 - Non-Latin characters were translated or romanized
 - The CV has been tightened to one page
 
-## 11. Maintainer Notes
+## 12. Maintainer Notes
 
 The root project version is in `VERSION`. The reusable card version is in
 `card/card.json` and the card repo's git tags.

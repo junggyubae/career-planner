@@ -37,9 +37,11 @@ Check-Command pdflatex
 Write-Host ""
 Write-Host "Generated skills"
 Check-File ".codex/skills/info-retrieval/SKILL.md"
+Check-File ".codex/skills/career-compass/SKILL.md"
 Check-File ".codex/skills/finder/SKILL.md"
 Check-File ".codex/skills/alignment/SKILL.md"
 Check-File ".claude/skills/info-retrieval/SKILL.md"
+Check-File ".claude/skills/career-compass/SKILL.md"
 Check-File ".claude/skills/finder/SKILL.md"
 Check-File ".claude/skills/alignment/SKILL.md"
 

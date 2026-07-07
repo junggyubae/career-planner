@@ -25,9 +25,11 @@ Confirm the generated Codex and Claude skill folders exist locally:
 
 ```bash
 test -d .codex/skills/info-retrieval
+test -d .codex/skills/career-compass
 test -d .codex/skills/finder
 test -d .codex/skills/alignment
 test -d .claude/skills/info-retrieval
+test -d .claude/skills/career-compass
 test -d .claude/skills/finder
 test -d .claude/skills/alignment
 ```
@@ -49,6 +51,7 @@ Before pushing, confirm private files are ignored:
 - `state/experience/*.md` except `state/experience/README.md`
 - `state/uploads/*`
 - `goal/goals.md`
+- `action/roadmap/*`
 - `action/discovery/*`
 - `action/applications/*`
 - generated `.codex/`, `.claude/`, `.cursor/`, and `.mcp.json`
@@ -73,9 +76,12 @@ Run one small pass through each skill:
 1. **Info Retrieval:** add or refine one non-sensitive test experience, then confirm
    `state/TIMELINE.md` is reverse-chronological and each title links to its source
    `state/experience/*.md` file.
-2. **Finder:** run one named-school PI search and confirm every included PI has a
+2. **Career Compass:** run one trajectory review and confirm it writes to
+   `action/roadmap/`, updates `action/ROADMAP.md`, uses the gentle readiness map,
+   and grounds gaps/recommendations in `state` or `goal`.
+3. **Finder:** run one named-school PI search and confirm every included PI has a
    current-affiliation verification note plus an active-work signal.
-3. **Alignment:** generate one application bundle from a target URL, compile both
+4. **Alignment:** generate one application bundle from a target URL, compile both
    PDFs when `tectonic` or `pdflatex` is installed, and confirm the CV is one page.
 
 ## 6. Final push check
