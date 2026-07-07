@@ -195,7 +195,7 @@ Use **Finder** when you have a target school or institution.
 
 ```text
 Find PIs at Stanford
-Find labs at Georgia Tech that fit my state and goals
+Find labs at MIT that fit my state and goals.
 ```
 
 Finder reads your `state/` and `goal/`, researches current faculty/labs, verifies

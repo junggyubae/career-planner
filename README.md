@@ -63,7 +63,7 @@ Find PIs at Stanford.
 ```
 
 ```text
-Find labs at Georgia Tech that fit my state and goals.
+Find labs at MIT that fit my state and goals.
 ```
 
 ### Draft Applications
