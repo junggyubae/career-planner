@@ -18,7 +18,7 @@ Confirm the root repo pins the intended `career-planner-card` commit or tag.
 ## 2. Materialize agent skills
 
 ```bash
-drwn write
+scripts/bootstrap.sh
 ```
 
 Confirm the generated Codex and Claude skill folders exist locally:
@@ -59,11 +59,12 @@ Only skeleton docs, card pins, and non-personal card logic should be tracked.
 ## 4. Check local dependencies
 
 ```bash
-command -v pdflatex || test -x /Library/TeX/texbin/pdflatex
+scripts/doctor.sh
+command -v tectonic || command -v pdflatex || test -x /Library/TeX/texbin/pdflatex
 ```
 
-Alignment can emit `.tex` without `pdflatex`, but a release smoke test should build
-both `cv.pdf` and `sop.pdf` when `pdflatex` is available.
+Alignment can emit `.tex` without a PDF compiler. A release smoke test should
+build both `cv.pdf` and `sop.pdf` when `tectonic` or `pdflatex` is available.
 
 ## 5. Smoke-test the workflows
 
@@ -75,7 +76,7 @@ Run one small pass through each skill:
 2. **Finder:** run one named-school PI search and confirm every included PI has a
    current-affiliation verification note plus an active-work signal.
 3. **Alignment:** generate one application bundle from a target URL, compile both
-   PDFs when `pdflatex` is installed, and confirm the CV is one page.
+   PDFs when `tectonic` or `pdflatex` is installed, and confirm the CV is one page.
 
 ## 6. Final push check
 
