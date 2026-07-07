@@ -15,8 +15,10 @@ Set up this Career Planner repo for me:
 https://github.com/junggyubae/career-planner
 
 Clone or open it if needed, run the bootstrap, verify the skills, and then start
-onboarding me. Ask me to upload my CV, transcript, SOP, resume, research
-statement, or templates. Keep all personal files private and do not push them.
+onboarding me. Use scripts/bootstrap.sh on macOS/Linux or scripts/bootstrap.ps1
+on Windows, then run the matching doctor script if you need to verify setup. Ask
+me to upload my CV, transcript, SOP, resume, research statement, or templates.
+Keep all personal files private and do not push them.
 ```
 
 The repo includes agent instructions in `AGENTS.md`, a Claude bridge in

@@ -16,10 +16,12 @@ Darwinian, or LaTeX.
    - `.codex/skills/info-retrieval`
    - `.codex/skills/career-compass`
    - `.codex/skills/finder`
+   - `.codex/skills/paper-briefing`
    - `.codex/skills/alignment`
    - `.claude/skills/info-retrieval`
    - `.claude/skills/career-compass`
    - `.claude/skills/finder`
+   - `.claude/skills/paper-briefing`
    - `.claude/skills/alignment`
 3. Treat PDF compilation as optional. Tectonic is preferred; `pdflatex` is a
    fallback. Missing PDF tools should not block onboarding.
@@ -72,5 +74,6 @@ First-run onboarding is complete when:
 - The user knows the next available actions:
   - "Review my career trajectory and recommend next steps"
   - "Find PIs at <school>"
+  - "Brief papers from these PI candidates"
   - "Tailor an application for this URL: <url>"
   - "Interview me more about <topic>"

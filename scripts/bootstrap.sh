@@ -31,9 +31,14 @@ try_install_base_tools() {
 
   if have brew; then
     brew install git node curl
-  elif have apt-get && have sudo; then
-    sudo apt-get update
-    sudo apt-get install -y git curl nodejs npm ca-certificates unzip
+  elif have apt-get; then
+    if [ "$(id -u)" -eq 0 ]; then
+      apt-get update
+      apt-get install -y git curl nodejs npm ca-certificates unzip
+    elif have sudo; then
+      sudo apt-get update
+      sudo apt-get install -y git curl nodejs npm ca-certificates unzip
+    fi
   fi
 }
 

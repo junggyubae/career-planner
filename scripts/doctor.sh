@@ -48,4 +48,18 @@ check_file .claude/skills/paper-briefing/SKILL.md
 check_file .claude/skills/alignment/SKILL.md
 
 printf "\nPrivacy ignores\n"
-git check-ignore -v state/identity.md state/beliefs.md goal/goals.md action/BOARD.md .codex .claude .cursor .mcp.json .agents/drwn/card.lock || true
+git check-ignore -v \
+  state/identity.md \
+  state/beliefs.md \
+  goal/goals.md \
+  action/roadmap/2026-01-01-career-compass.md \
+  action/discovery/INDEX.md \
+  action/discovery/mit-jane-doe/finder.md \
+  action/discovery/mit-jane-doe/briefing.md \
+  action/discovery/mit-jane-doe/notes.md \
+  action/applications/mit-example/target.md \
+  .codex \
+  .claude \
+  .cursor \
+  .mcp.json \
+  .agents/drwn/card.lock || true

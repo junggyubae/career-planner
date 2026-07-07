@@ -28,6 +28,9 @@ setup for them. Do not ask the user to run CLI commands unless automation fails.
 - Use Career Compass when the user wants a trajectory review, short-/mid-/long-term
   goals, next-step recommendations, gap analysis, or advice on what to do next.
 - Use Finder when the user names a school and wants PI/lab discovery.
+- Use Paper Briefing when the user wants to go deeper on candidate PIs/labs,
+  review abstract-level paper evidence, prepare interview points, or generate
+  SOP talking points from lab papers.
 - Use Alignment when the user provides a target URL and wants tailored CV/SOP
   materials.
 

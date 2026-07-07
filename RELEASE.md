@@ -27,10 +27,12 @@ Confirm the generated Codex and Claude skill folders exist locally:
 test -d .codex/skills/info-retrieval
 test -d .codex/skills/career-compass
 test -d .codex/skills/finder
+test -d .codex/skills/paper-briefing
 test -d .codex/skills/alignment
 test -d .claude/skills/info-retrieval
 test -d .claude/skills/career-compass
 test -d .claude/skills/finder
+test -d .claude/skills/paper-briefing
 test -d .claude/skills/alignment
 ```
 
@@ -42,7 +44,11 @@ should not be committed.
 
 ```bash
 git status --short --ignored
-git check-ignore -v state/identity.md state/beliefs.md goal/goals.md action/BOARD.md
+git check-ignore -v state/identity.md state/beliefs.md goal/goals.md \
+  action/roadmap/2026-01-01-career-compass.md \
+  action/discovery/INDEX.md action/discovery/mit-jane-doe/finder.md \
+  action/discovery/mit-jane-doe/briefing.md \
+  action/discovery/mit-jane-doe/notes.md action/applications/mit-example/target.md
 ```
 
 Before pushing, confirm private files are ignored:
@@ -81,7 +87,9 @@ Run one small pass through each skill:
    and grounds gaps/recommendations in `state` or `goal`.
 3. **Finder:** run one named-school PI search and confirm every included PI has a
    current-affiliation verification note plus an active-work signal.
-4. **Alignment:** generate one application bundle from a target URL, compile both
+4. **Paper Briefing:** run one abstract-based pass for a Finder output and confirm
+   it stores links/citations instead of copyrighted PDFs.
+5. **Alignment:** generate one application bundle from a target URL, compile both
    PDFs when `tectonic` or `pdflatex` is installed, and confirm the CV is one page.
 
 ## 6. Final push check

@@ -49,4 +49,18 @@ Check-File ".claude/skills/alignment/SKILL.md"
 
 Write-Host ""
 Write-Host "Privacy ignores"
-git check-ignore -v state/identity.md state/beliefs.md goal/goals.md action/BOARD.md .codex .claude .cursor .mcp.json .agents/drwn/card.lock
+git check-ignore -v `
+  state/identity.md `
+  state/beliefs.md `
+  goal/goals.md `
+  action/roadmap/2026-01-01-career-compass.md `
+  action/discovery/INDEX.md `
+  action/discovery/mit-jane-doe/finder.md `
+  action/discovery/mit-jane-doe/briefing.md `
+  action/discovery/mit-jane-doe/notes.md `
+  action/applications/mit-example/target.md `
+  .codex `
+  .claude `
+  .cursor `
+  .mcp.json `
+  .agents/drwn/card.lock

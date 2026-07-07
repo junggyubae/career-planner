@@ -26,12 +26,26 @@ function Run-Drwn {
   & npx --yes --package darwinian-minds@latest drwn @Args
 }
 
+function Refresh-Path {
+  $MachinePath = [Environment]::GetEnvironmentVariable("Path", "Machine")
+  $UserPath = [Environment]::GetEnvironmentVariable("Path", "User")
+  $KnownPaths = @(
+    "$env:ProgramFiles\Git\cmd",
+    "$env:ProgramFiles\nodejs",
+    "$HOME\.bun\bin"
+  )
+  $env:PATH = (@($MachinePath, $UserPath, $env:PATH) + $KnownPaths) -join ";"
+}
+
 Say "Checking base tools"
+Refresh-Path
 if (-not (Have git) -and (Have winget)) {
   winget install -e --id Git.Git
+  Refresh-Path
 }
 if (-not (Have npm) -and (Have winget)) {
   winget install -e --id OpenJS.NodeJS.LTS
+  Refresh-Path
 }
 
 Require git "git is required to update the card submodule. Install Git, restart PowerShell, and rerun bootstrap."
