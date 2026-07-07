@@ -4,7 +4,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
-CARD_TAG="${CAREER_PLANNER_CARD_TAG:-v0.2.7}"
+CARD_TAG="${CAREER_PLANNER_CARD_TAG:-v0.2.8}"
 CARD_SOURCE="git+https://github.com/junggyubae/career-planner-card.git#${CARD_TAG}"
 
 say() {
@@ -81,10 +81,12 @@ for path in \
   .codex/skills/info-retrieval/SKILL.md \
   .codex/skills/career-compass/SKILL.md \
   .codex/skills/finder/SKILL.md \
+  .codex/skills/paper-briefing/SKILL.md \
   .codex/skills/alignment/SKILL.md \
   .claude/skills/info-retrieval/SKILL.md \
   .claude/skills/career-compass/SKILL.md \
   .claude/skills/finder/SKILL.md \
+  .claude/skills/paper-briefing/SKILL.md \
   .claude/skills/alignment/SKILL.md
 do
   test -f "$path" || die "Missing generated skill: $path"

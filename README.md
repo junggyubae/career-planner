@@ -1,7 +1,8 @@
 # Career Planner
 
 Career Planner is an agent workspace for building a private career memory,
-discovering research opportunities, and drafting tailored application materials.
+discovering research opportunities, briefing lab papers, and drafting tailored
+application materials.
 
 Your personal files stay local in `state/`, `goal/`, and `action/`.
 
@@ -25,7 +26,7 @@ The agent should handle Git, Bun, Darwinian, and skill setup for you.
 - Uploads are saved in `state/uploads/`
 - Career facts go into `state/`
 - Goals go into `goal/`
-- Roadmaps, discovery reports, and applications go into `action/`
+- Roadmaps, discovery reports, paper briefings, and applications go into `action/`
 - PDFs are optional: Tectonic is preferred when installed, `pdflatex` is a fallback
 
 ## Use It
@@ -79,6 +80,16 @@ Find PIs at Stanford.
 
 ```text
 Find labs at MIT that fit my state and goals.
+```
+
+### Deepen Lab Fit
+
+```text
+Review abstracts for the MIT labs Finder found and prepare paper briefings.
+```
+
+```text
+Help me prioritize these PIs using paper briefings and my beliefs.
 ```
 
 ### Draft Applications

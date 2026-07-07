@@ -63,7 +63,7 @@ If you already cloned the repo and only need to refresh the generated skills:
 
 ```bash
 git submodule update --init --recursive
-npx --yes --package darwinian-minds@latest drwn card clone --allow-untrusted-source git+https://github.com/junggyubae/career-planner-card.git#v0.2.7
+npx --yes --package darwinian-minds@latest drwn card clone --allow-untrusted-source git+https://github.com/junggyubae/career-planner-card.git#v0.2.8
 npx --yes --package darwinian-minds@latest drwn write
 ```
 
@@ -74,6 +74,7 @@ include:
 - `info-retrieval`
 - `career-compass`
 - `finder`
+- `paper-briefing`
 - `alignment`
 
 ## 3. Install Optional PDF Tools
@@ -251,11 +252,15 @@ Find labs at MIT that fit my state and goals.
 ```
 
 Finder reads your `state/` and `goal/`, researches current faculty/labs, verifies
-that each listed PI is currently affiliated and active, and writes a ranked report
-to:
+that each listed PI is currently affiliated and active, then writes a generated
+discovery index plus per-PI folders to:
 
 ```text
-action/discovery/<school>-<date>.md
+action/discovery/
+├── INDEX.md
+└── <school-slug>-<pi-slug>/
+    ├── finder.md
+    └── notes.md
 ```
 
 Good Finder output should include:
@@ -266,8 +271,47 @@ Good Finder output should include:
 - Goal fit grounded in `goal/goals.md`
 - A current-affiliation verification note
 - Recent activity or recruiting signal when visible
+- Lab alumni/outcome signals when public evidence exists
+- A reach/target/safe fit band with a rationale
+- A connection map between your known PIs/mentors/network and the target PI, if
+  public evidence supports one
 
-## 8. Generate Application Materials
+## 8. Read Papers And Prepare Briefings
+
+Use **Paper Briefing** after Finder when you want to go deeper on specific labs,
+prioritize PIs, prepare for conversations, or generate SOP talking points.
+
+```text
+Review abstracts for the MIT labs Finder found and prepare paper briefings.
+```
+
+```text
+Help me prioritize these PIs using paper briefings and my beliefs.
+```
+
+Paper Briefing writes into the same per-PI discovery folders and updates
+`action/discovery/INDEX.md`:
+
+```text
+action/discovery/<school-slug>-<pi-slug>/
+├── finder.md
+├── dossier.md
+├── briefing.md
+└── notes.md
+```
+
+It stores citations, links, abstracts, abstract-based notes, access limitations,
+interview questions, SOP talking points, alumni/outcome notes, updated
+reach/target/safe fit, and connection signals. It should not store full
+copyrighted PDFs in the repo by default.
+
+Paper Briefing is abstract-first by default. It should not fetch or read a whole
+paper unless you expressly ask for a summary of that paper or specific details
+inside it. If you do ask for full-paper reading and access becomes difficult,
+the agent may suggest an optional browser extension or bridge in the future, but
+it is not required for using Career Planner.
+
+## 9. Generate Application Materials
 
 Use **Alignment** when you have a specific target URL, such as a lab, internship,
 job, fellowship, or program page.
@@ -291,9 +335,10 @@ If `tectonic` or `pdflatex` is installed, Alignment also writes `cv.pdf` and
 `sop.pdf`.
 
 The CV must be strictly one page. The SOP should use your real experience,
-beliefs, and goals; it should not invent facts to satisfy the target.
+beliefs, goals, and any relevant paper briefing; it should not invent facts to
+satisfy the target.
 
-## 9. PDF Requirements
+## 10. PDF Requirements
 
 Check PDF compiler availability with:
 
@@ -311,7 +356,7 @@ export PATH="/Library/TeX/texbin:$PATH"
 If `pdflatex` is unavailable, Alignment can still produce `.tex` files, but the
 lighter recommended install is Tectonic.
 
-## 10. Privacy Rules
+## 11. Privacy Rules
 
 The private files are intentionally ignored by Git. Before pushing, run:
 
@@ -326,14 +371,14 @@ Do not push:
 - Goals
 - Uploaded CVs, transcripts, SOPs, or templates
 - Career Compass roadmap reports
-- Finder reports
+- Finder reports and paper briefings
 - Application bundles
 - Generated `.codex/`, `.claude/`, `.cursor/`, or `.mcp.json` files
 
 The public repository should contain structure, docs, card pins, and non-personal
 card logic only.
 
-## 11. Troubleshooting
+## 12. Troubleshooting
 
 If setup looks stale, run the doctor:
 
@@ -385,7 +430,7 @@ If `drwn write` cannot resolve the card version, clone the exact git tag into th
 local Darwinian store:
 
 ```bash
-npx --yes --package darwinian-minds@latest drwn card clone --allow-untrusted-source git+https://github.com/junggyubae/career-planner-card.git#v0.2.7
+npx --yes --package darwinian-minds@latest drwn card clone --allow-untrusted-source git+https://github.com/junggyubae/career-planner-card.git#v0.2.8
 npx --yes --package darwinian-minds@latest drwn write
 ```
 
@@ -404,7 +449,7 @@ If Alignment fails to build PDFs, check:
 - Non-Latin characters were translated or romanized
 - The CV has been tightened to one page
 
-## 12. Maintainer Notes
+## 13. Maintainer Notes
 
 The root project version is in `VERSION`. The reusable card version is in
 `card/card.json` and the card repo's git tags.

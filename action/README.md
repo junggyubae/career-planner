@@ -2,7 +2,7 @@
 
 Your action `a`, produced by the card (the policy) from `state` + `goal`.
 
-- `discovery/` — Finder reports (**explore**: labs / PIs / opportunities)
+- `discovery/` — Finder + Paper Briefing reports (**explore/deepen**: labs / PIs / papers)
 - `roadmap/` — Career Compass reports (**orient**: goals / gaps / next steps);
   `ROADMAP.md` is a **derived** index of roadmap reports.
 - `applications/` — per-target bundles (**exploit**: target + tailored CV/SOP + notes + status);

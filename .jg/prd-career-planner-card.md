@@ -1,11 +1,11 @@
 # PRD: Career Planner — Darwinian Mind Card
 
-**Status:** Draft · **Project:** `career-planner@0.2` · **Card:** `@junggyubae/career-planner-card@0.2.7`
+**Status:** Draft · **Project:** `career-planner@0.2` · **Card:** `@junggyubae/career-planner-card@0.2.8`
 **Owner:** dev@greekwaters.io
 **Last updated:** 2026-07-02
 **Runtime:** Darwinian Mind Card running in Codex-first local agent workflows (also materializes Claude-compatible skills)
 
-> **Data model (v0.2.7):** `state · goal · action` (see §5). The card is the policy `π(action | state, goal)`. §5 is authoritative.
+> **Data model (v0.2.8):** `state · goal · action` (see §5). The card is the policy `π(action | state, goal)`. §5 is authoritative.
 
 ---
 
@@ -13,26 +13,28 @@
 
 The **Career Planner** is a single **Darwinian Mind Card** that helps a person plan their next career step — with a bias toward academic and research paths (labs, internships, hiring companies). The card bundles a small set of skills that operate over a **file-based career state** stored as markdown inside the repo.
 
-The card does four things (four "blocks"):
+The card does five things (five "blocks"):
 
 1. **Info Retrieval** — build and enrich the user's `state/` and `goal/`, either by importing uploaded documents from chat (CV, SOP, transcript, resume, etc.) or by running a focused **interview** on a topic. Both paths only refine/enrich.
 2. **Career Compass** — review the user's trajectory and produce short-/mid-/long-term goals, next-step recommendations, gaps, awareness notes, and suggested experiments grounded in state, beliefs, and goals.
 3. **Finder (PI Finder in v1)** — the user names a **target school/institution**, and the card performs **deep research** to discover **Principal Investigators (PIs) / labs** at that school whose work fits the user's state, beliefs, and goals.
-4. **Alignment** — given a **URL** for a specific target (a lab, an internship, a job), generate a **tailored CV and SOP** grounded in the user's state, beliefs, and goals, output as **LaTeX (`.tex`) compiled to `.pdf`** when a compiler is available.
+4. **Paper Briefing** — go deeper on Finder candidates by collecting abstract-based paper dossiers, comparing lab fit, and preparing interview questions + SOP talking points. Full-paper reading happens only when the user expressly asks for a paper summary or specific details inside a paper.
+5. **Alignment** — given a **URL** for a specific target (a lab, an internship, a job), generate a **tailored CV and SOP** grounded in the user's state, beliefs, goals, and any relevant paper briefing, output as **LaTeX (`.tex`) compiled to `.pdf`** when a compiler is available.
 
 The whole system is deliberately simple: no separate app, no database. The **repo is the product**. Career state lives as markdown files that both the human and the agent can read, diff, and version locally.
 
-**Problem it solves:** Career planning is fragmented — your history lives in old CVs, your goals live in your head, and tailoring materials for each opportunity is slow and repetitive. Career Planner centralizes a durable, structured state of who you are and automates three high-friction tasks: *orienting* your next steps, *finding* the right opportunities, and *aligning* your materials to them.
+**Problem it solves:** Career planning is fragmented — your history lives in old CVs, your goals live in your head, and tailoring materials for each opportunity is slow and repetitive. Career Planner centralizes a durable, structured state of who you are and automates four high-friction tasks: *orienting* your next steps, *finding* the right opportunities, *deepening* promising labs through papers, and *aligning* your materials to them.
 
 ---
 
 ## 2. Goals
 
-- Provide **one Mind Card** that exposes four skills over shared, file-based `state/`, `goal/`, and `action/`.
+- Provide **one Mind Card** that exposes five skills over shared, file-based `state/`, `goal/`, and `action/`.
 - Make state **human-readable and hand-editable** — every fact is a markdown file the user can inspect and edit.
 - Let a user grow their state two ways: **chat upload → save to `state/uploads/` → refine**, and **interview → refine/enrich**.
 - Turn state, beliefs, interests, and goals into a grounded **Career Compass** roadmap with next steps, gaps, and suggested experiments.
 - Given a target school, surface **real PIs/labs** via deep research, ranked by fit against the user's state, beliefs, and goals.
+- Given a Finder result, create abstract-based paper dossiers, selected-paper briefings, interview questions, and SOP talking points without storing copyrighted PDFs by default.
 - Generate a **tailored CV and SOP** for any target URL, drawing only from verified state (no fabrication), delivered as **`.tex` + compiled `.pdf`** using the user's template or a bundled default.
 - Keep the state schema **stable and extensible** (identity, experience, uploads, interests, beliefs, goals).
 - Enforce a clean **shareable-vs-private split**: the card (logic) is shareable; the state/goal/action data (personal data) is git-ignored and never leaves the user's machine.
@@ -54,7 +56,7 @@ The whole system is deliberately simple: no separate app, no database. The **rep
 
 ## 4. System Overview
 
-### 4.1 The Card and its four blocks
+### 4.1 The Card and its five blocks
 
 ```mermaid
 flowchart TD
@@ -65,7 +67,8 @@ flowchart TD
         IR["Block 1: Info Retrieval Skill"]
         COMPASS["Block 2: Career Compass Skill"]
         FIND["Block 3: Finder Skill"]
-        ALIGN["Block 4: Alignment Skill"]
+        PAPER["Block 4: Paper Briefing Skill"]
+        ALIGN["Block 5: Alignment Skill"]
     end
 
     subgraph SG["state/ + goal/ (markdown in repo)"]
@@ -80,27 +83,32 @@ flowchart TD
     IR -->|refine / enrich| SG
     SG -->|reads context| COMPASS
     SG -->|reads context| FIND
+    SG -->|reads context| PAPER
     SG -->|reads context| ALIGN
     COMPASS -->|action/roadmap/ report| U
-    FIND -->|action/discovery/ report| U
+    FIND -->|action/discovery/ per-PI folders| PAPER
+    PAPER -->|paper briefings + synthesis| U
+    PAPER -->|SOP talking points| ALIGN
     ALIGN -->|action/applications/ CV + SOP| U
 
     UPLOAD[/CV, SOP, docs/] --> IR
+    SCHOOL[/Target school/] --> FIND
+    PAPERS[/Paper briefing request/] --> PAPER
     URL[/Target URL: lab / internship / job/] --> ALIGN
 ```
 
 ### 4.2 How the blocks relate
 
-- **Info Retrieval writes** to `state/` and `goal/`. **Career Compass, Finder, and Alignment read** from them and write to `action/`. This read/write split keeps the source of truth clean.
+- **Info Retrieval writes** to `state/` and `goal/`. **Career Compass, Finder, Paper Briefing, and Alignment read** from them and write to `action/`. This read/write split keeps the source of truth clean.
 - Info Retrieval has **two entry paths** that both end at enriched state/goal: the **upload path** and the **interview path**. **Both paths refine and enrich** — the interview is not merely appending, it refines existing facts too.
 - The only operations allowed on `state`/`goal` are **refine** and **enrichment**. No skill destructively overwrites or deletes user-authored content.
-- Career Compass, Finder, and Alignment never invent facts — they are grounded strictly in what `state` contains.
+- Career Compass, Finder, Paper Briefing, and Alignment never invent facts — they are grounded strictly in `state`, `goal`, verified sources, and existing `action` artifacts.
 
 ### 4.3 Why a card *and* a repo (the privacy split)
 
 The card and the repo are separated on purpose, along a **shareable vs. private** boundary:
 
-- **The card is shareable.** It bundles only the *logic* — the four skills, the interview scripts, roadmap behavior, research behavior, and alignment behavior. It carries **no personal data**, so it can be published and reused by anyone via the Darwinian sharing flow.
+- **The card is shareable.** It bundles only the *logic* — the five skills, the interview scripts, roadmap behavior, research behavior, paper briefing behavior, and alignment behavior. It carries **no personal data**, so it can be published and reused by anyone via the Darwinian sharing flow.
 - **The repo's data is private.** `state/`, `goal/`, and `action/` are **git-ignored** so a user never accidentally pushes their CV, SOP, identity, interests, beliefs, goals, or applications to a public remote. The data lives locally with the user.
 
 ```mermaid
@@ -120,9 +128,9 @@ flowchart LR
 
 ---
 
-## 5. Data Design — `state · goal · action` (v0.2.7)
+## 5. Data Design — `state · goal · action` (v0.2.8)
 
-> **v0.2.0 model change (current: v0.2.7).** The earlier `memory/` + `output/` layout was replaced by this RL-shaped model. The card is the **policy** `π(action | state, goal)`. This section is the data model of record.
+> **v0.2.0 model change (current: v0.2.8).** The earlier `memory/` + `output/` layout was replaced by this RL-shaped model. The card is the **policy** `π(action | state, goal)`. This section is the data model of record.
 
 Every fact is a markdown file so it is diffable, greppable, and editable by hand. Structured items carry **YAML frontmatter**, and indexes are **derived** (regenerated by the agent), never hand-maintained.
 
@@ -144,7 +152,7 @@ flowchart TD
     A["action/  (a — what you do)"]
     A --> ROAD["roadmap/<br/>YYYY-MM-DD-career-compass.md"]
     A --> RDX["ROADMAP.md<br/>(DERIVED index)"]
-    A --> DIS["discovery/<br/>&lt;school&gt;-&lt;date&gt;.md (Finder)"]
+    A --> DIS["discovery/<br/>INDEX.md + &lt;school&gt;-&lt;pi&gt;/"]
     A --> APP["applications/&lt;slug&gt;/<br/>target.md + cv.* + sop.* + notes.md"]
     A --> BRD["applications/BOARD.md<br/>(DERIVED, grouped by status)"]
 ```
@@ -153,16 +161,17 @@ flowchart TD
 
 | Path | Contents | Written by | Read by |
 |------|----------|------------|---------|
-| `state/identity.md` | name, contact, homepage, GitHub, LinkedIn, IDs, current status | Info Retrieval | Career Compass, Finder, Alignment |
-| `state/experience/*.md` | one frontmatter-dated file per item | Info Retrieval | Career Compass, Finder, Alignment |
-| `state/TIMELINE.md` | time-ordered index — **derived** from frontmatter | Info Retrieval (regenerates) | humans, Career Compass, Finder, Alignment |
-| `state/interests.md` | research/career interests | Info Retrieval | Career Compass, Finder, Alignment |
-| `state/beliefs.md` | **values + how you act on them — the core identity** | Info Retrieval | **Career Compass (trajectory + gaps)** + **Finder (values/culture fit)** + **Alignment (SOP voice + fit)** |
+| `state/identity.md` | name, contact, homepage, GitHub, LinkedIn, IDs, current status | Info Retrieval | Career Compass, Finder, Paper Briefing, Alignment |
+| `state/experience/*.md` | one frontmatter-dated file per item | Info Retrieval | Career Compass, Finder, Paper Briefing, Alignment |
+| `state/TIMELINE.md` | time-ordered index — **derived** from frontmatter | Info Retrieval (regenerates) | humans, Career Compass, Finder, Paper Briefing, Alignment |
+| `state/interests.md` | research/career interests | Info Retrieval | Career Compass, Finder, Paper Briefing, Alignment |
+| `state/beliefs.md` | **values + how you act on them — the core identity** | Info Retrieval | **Career Compass (trajectory + gaps)** + **Finder (values/culture fit)** + **Paper Briefing (identity fit)** + **Alignment (SOP voice + fit)** |
 | `state/uploads/` | raw uploaded docs + user's own template | Info Retrieval | Info Retrieval, Alignment (template) |
-| `goal/goals.md` | short / mid / long-term goals | Info Retrieval | **Career Compass** (roadmap) + **Finder** (direction) + **Alignment** (trajectory) |
+| `goal/goals.md` | short / mid / long-term goals | Info Retrieval | **Career Compass** (roadmap) + **Finder** (direction) + **Paper Briefing** (priority) + **Alignment** (trajectory) |
 | `action/roadmap/*.md` | Career Compass reports | Career Compass | humans |
 | `action/ROADMAP.md` | roadmap index — **derived**, reverse chronological | Career Compass (regenerates) | humans |
-| `action/discovery/*.md` | Finder PI/lab reports | Finder | humans |
+| `action/discovery/INDEX.md` | generated overview across schools, PIs, labs, fit bands, statuses, alumni/outcomes, connection signals, and next actions | Finder, Paper Briefing | humans, Career Compass, Alignment |
+| `action/discovery/<school-slug>-<pi-slug>/` | per-PI files: `finder.md`, `dossier.md`, `briefing.md`, `notes.md` | Finder, Paper Briefing | humans, Career Compass, Alignment |
 | `action/applications/<slug>/` | `target.md` (+frontmatter/status), `cv.*`, `sop.*`, `notes.md` | Alignment | humans |
 | `action/applications/BOARD.md` | pipeline index — **derived**, grouped by `status` | Alignment (regenerates) | humans |
 
@@ -234,15 +243,31 @@ flowchart LR
     R2 --> R3[Deep research the school:<br/>discover PIs / labs there]
     R3 --> Rv[Verifier pass:<br/>confirm each PI is CURRENTLY<br/>at the school & active]
     Rv --> R4[Rank survivors by fit:<br/>topical + belief + goal]
-    R4 --> R5[Produce PI report → action/discovery/:<br/>lab link, PI, why-it-fits, verified]
-    R5 --> Out([Report delivered to user])
+    R4 --> R5[Write action/discovery/:<br/>INDEX.md + school-PI folders]
+    R5 --> Out([Synthesis + PI folders delivered])
 ```
 
-**v1 behavior:** the user **names a target school**. Finder reads `state/` + `goal/`, forms a research profile, runs **deep research scoped to that school**, then a **verifier pass** confirms each PI is currently at the school and active before ranking. Output (to `action/discovery/`) is a **ranked report** — each PI has a lab link, a "why this fits you" grounded in specific `state`/`goal` facts, and a verification note.
+**v1 behavior:** the user **names a target school**. Finder reads `state/` + `goal/`, forms a research profile, runs **deep research scoped to that school**, then a **verifier pass** confirms each PI is currently at the school and active before ranking. Output lands directly under `action/discovery/`: a generated `INDEX.md` that groups all researched schools/PIs, plus one per-PI folder named `<school-slug>-<pi-slug>/` containing `finder.md` and `notes.md`. Each PI profile has a lab link, a "why this fits you" grounded in specific `state`/`goal` facts, a reach/target/safe fit band, public lab alumni/outcome signals when available, a connection map to the user's known PIs/mentors/network when evidence exists, and a verification note.
 
 **Phase 2 (noted, out of scope now):** internships and company/industry roles, school-less open discovery, structured source integrations (job boards, lab directories), saved searches, and periodic re-runs.
 
-### 6.4 Block 4 — Alignment (URL → tailored CV + SOP)
+### 6.4 Block 4 — Paper Briefing (papers → deeper fit)
+
+```mermaid
+flowchart LR
+    S([User invokes Paper Briefing]) --> D[Read Finder outputs under<br/>action/discovery/&lt;school&gt;/]
+    D --> P1[Collect candidate papers:<br/>citations, links, abstracts]
+    P1 --> P2[Write dossier.md<br/>per PI folder]
+    P2 --> P3[Analyze selected abstracts:<br/>topics + likely methods]
+    P3 --> P4[Analyze identity fit:<br/>interests + beliefs + goals]
+    P4 --> P5[Write briefing.md:<br/>questions + SOP talking points]
+    P5 --> P6[Update discovery INDEX.md:<br/>tiers, ranks, flags]
+    P6 --> Out([Briefings delivered to user])
+```
+
+**v1 behavior:** after Finder, the user asks to review papers, prioritize PIs, prepare for interviews, or deepen a school/lab shortlist. Paper Briefing reads the relevant per-PI folders under `action/discovery/`, collects candidate papers from primary/durable sources (lab publication pages, faculty pages, arXiv, PubMed, Semantic Scholar, publisher/conference pages), stores citations/links/abstracts/abstract-based notes/access limits by default, then writes `dossier.md` and `briefing.md` under each per-PI folder. It is **abstract-first by default**: it does not fetch or read full papers unless the user expressly asks for a paper summary or specific details inside a paper. If the user does ask for full-paper reading, it uses an access ladder: open full text, user-uploaded files, user-authorized browser access, then unavailable fallback. It updates `INDEX.md` with school-grouped ranks, tiers, top papers to read first, interview priorities, SOP angles, alumni/outcome signals, reach/target/safe fit bands, and connection signals. It does **not** store full copyrighted PDFs by default.
+
+### 6.5 Block 5 — Alignment (URL → tailored CV + SOP)
 
 ```mermaid
 flowchart LR
@@ -253,7 +278,8 @@ flowchart LR
     Td --> A1
     A1[Fetch & analyze target:<br/>lab / internship / job page] --> A2[Extract requirements,<br/>focus areas, keywords]
     A2 --> A3[Read state/ + goal/:<br/>experience, interests,<br/>beliefs, identity, goals]
-    A3 --> A4[Match state ↔ target:<br/>select most relevant evidence]
+    A3 --> A3b[Read matching discovery<br/>briefing if available]
+    A3b --> A4[Match state ↔ target:<br/>select most relevant evidence]
     A4 --> A5[Render tailored CV .tex<br/>grounded only in state]
     A4 --> A6[Render tailored SOP .tex<br/>voice from beliefs + goals]
     A5 --> C{Compile .tex → .pdf<br/>auto-iterate on errors}
@@ -263,9 +289,9 @@ flowchart LR
     C -->|builds, CV = 1 page| Out([action/applications/&lt;slug&gt;/<br/>.tex + .pdf delivered])
 ```
 
-**v1 behavior:** the user pastes a URL for a specific target. Alignment first resolves the **template** (user's own from `state/uploads/`, else the bundled default), fetches and analyzes the target, matches it against `state`, and renders a **tailored CV and SOP as LaTeX**. It **compiles with the lightest available compiler (`tectonic` first, `pdflatex` fallback), auto-iterating on errors until the PDF builds when a compiler is available**, and **enforces a strictly one-page CV** (trim + tighten + recompile). Everything is grounded in `state` — **no fabricated experience**. The SOP leans on `beliefs` and `goals` to sound like the user and argue fit. Output lands in `action/applications/<slug>/`.
+**v1 behavior:** the user pastes a URL for a specific target. Alignment first resolves the **template** (user's own from `state/uploads/`, else the bundled default), fetches and analyzes the target, matches it against `state` and any relevant `action/discovery/**/briefing.md`, and renders a **tailored CV and SOP as LaTeX**. It **compiles with the lightest available compiler (`tectonic` first, `pdflatex` fallback), auto-iterating on errors until the PDF builds when a compiler is available**, and **enforces a strictly one-page CV** (trim + tighten + recompile). Everything is grounded in `state`, verified target material, and existing discovery context — **no fabricated experience**. The SOP leans on `beliefs`, `goals`, and paper-grounded talking points to sound like the user and argue fit. Output lands in `action/applications/<slug>/`.
 
-### 6.5 End-to-end sequence (typical first session)
+### 6.6 End-to-end sequence (typical first session)
 
 ```mermaid
 sequenceDiagram
@@ -288,11 +314,15 @@ sequenceDiagram
 
     User->>Card: Run Finder for "Stanford"
     Card->>Data: Read state/ + goal/
-    Card-->>User: Verified, ranked PIs → action/discovery/
+    Card-->>User: Verified, ranked PIs → action/discovery/INDEX.md + school-PI folders
+
+    User->>Card: "Review abstracts for these labs"
+    Card->>Data: Read Finder outputs + state/interests + beliefs + goals
+    Card-->>User: Dossiers + briefings → action/discovery/<school-pi>/
 
     User->>Card: Align to <lab URL>
     Card->>User: Use your template or default?
-    Card->>Data: Read state/ + goal/ (+ user template)
+    Card->>Data: Read state/ + goal/ + briefing (+ user template)
     Card-->>User: One-page CV + SOP (.pdf) → action/applications/<slug>/
 ```
 
@@ -310,13 +340,13 @@ sequenceDiagram
 - [ ] `state/TIMELINE.md`, `action/ROADMAP.md`, and `action/applications/BOARD.md` are documented as derived indexes, not hand-maintained files.
 
 ### US-002: Author the Career Planner Mind Card
-**Description:** As a user, I want a single Darwinian Mind Card that registers the four skills so I can invoke the whole system from Codex.
+**Description:** As a user, I want a single Darwinian Mind Card that registers the five skills so I can invoke the whole system from Codex.
 
 **Acceptance Criteria:**
 - [ ] A card source is created via the Darwinian authoring flow
-- [ ] The card bundles four skills: Info Retrieval, Career Compass, Finder, Alignment
+- [ ] The card bundles five skills: Info Retrieval, Career Compass, Finder, Paper Briefing, Alignment
 - [ ] The card applies cleanly to the project with `drwn write` (materializes skills without errors)
-- [ ] Inspecting the card shows all four skills active
+- [ ] Inspecting the card shows all five skills active
 
 ### US-003: Info Retrieval — upload path
 **Description:** As a user, I want to upload documents in chat and have them saved and refined into state/goals so I do not have to type my history manually.
@@ -362,23 +392,41 @@ sequenceDiagram
 - [ ] Finder reads the full `state/` and `goal/`, including `state/beliefs.md`, before researching
 - [ ] Output is a ranked list of **PIs/labs at that school**
 - [ ] Each item includes the lab link, PI name, current-affiliation verification, recent activity signal, and a "why it fits" tied to specific state, belief, interest, and goal facts
-- [ ] The report is saved to `action/discovery/<school>-<date>.md`
+- [ ] The generated discovery overview is saved to `action/discovery/INDEX.md`
+- [ ] Each PI/lab gets a folder `action/discovery/<school-slug>-<pi-slug>/` with `finder.md` and `notes.md`
+- [ ] Each PI/lab includes lab alumni/outcome signals when public evidence exists
+- [ ] Each PI/lab includes a reach/target/safe fit band with a rationale and confidence note
+- [ ] Each PI/lab includes a connection map between the user's known PIs/mentors/network and the target PI when verified evidence exists
 
-### US-007: Alignment — tailored CV + SOP from a URL (LaTeX → PDF)
+### US-007: Paper Briefing — abstract-based lab preparation
+**Description:** As a user, I want to go deeper on Finder candidates by reviewing key paper abstracts, comparing lab fit, preparing interview questions, and saving SOP talking points.
+
+**Acceptance Criteria:**
+- [ ] Paper Briefing reads `action/discovery/INDEX.md` and the relevant per-PI `finder.md` files
+- [ ] Candidate papers are collected from primary or durable scholarly sources where possible
+- [ ] `dossier.md` stores citations, links, abstracts, relevance notes, and access limitations
+- [ ] `briefing.md` stores abstract-based selected-paper notes, identity-grounded fit analysis, interview questions, and SOP talking points
+- [ ] Full-paper fetching/reading happens only when the user expressly requests a paper summary or specific details inside a paper
+- [ ] Papers are labeled by access status (`abstract_available`, `abstract_unavailable`, `full_text_open_requested`, `full_text_user_access_requested`, `user_uploaded_pdf_requested`, or `paywalled_or_unavailable`)
+- [ ] Abstract-based notes are not presented as full-paper summaries
+- [ ] `INDEX.md` is updated with full-school ranking, tiers, top papers to read first, fit bands, alumni/outcomes, connection signals, and cross-lab flags
+- [ ] Full copyrighted PDFs are not stored in the repo by default
+
+### US-008: Alignment — tailored CV + SOP from a URL (LaTeX → PDF)
 **Description:** As a user, I want to give a target URL and get a CV and SOP tailored to it, grounded in my state, as polished PDFs.
 
 **Acceptance Criteria:**
 - [ ] Card asks whether to use the user's own template or the default; uses the user's `state/uploads/` template if present, else the bundled default
 - [ ] Card fetches and summarizes the target's requirements/focus
 - [ ] CV and SOP are generated using only facts present in `state/`
-- [ ] SOP reflects the user's voice using `state/beliefs.md`, `state/interests.md`, and `goal/goals.md`
+- [ ] SOP reflects the user's voice using `state/beliefs.md`, `state/interests.md`, `goal/goals.md`, and any relevant paper briefing
 - [ ] Each target gets its own folder `action/applications/<target-slug>/` containing `target.md`, `cv.tex`/`cv.pdf`, `sop.tex`/`sop.pdf`, and `notes.md`
 - [ ] Outputs are rendered as `.tex` **and compiled to `.pdf`** via `tectonic` or `pdflatex` when available
 - [ ] CV is strictly one page; if too long, it is trimmed/tightened and recompiled
 - [ ] `action/applications/BOARD.md` is regenerated from `target.md` frontmatter
 - [ ] A short "coverage note" flags any target requirement not backed by state
 
-### US-008: Bundle default LaTeX templates
+### US-009: Bundle default LaTeX templates
 **Description:** As a user without my own template, I want a good-looking default CV/SOP so I get a usable PDF out of the box.
 
 **Acceptance Criteria:**
@@ -387,7 +435,7 @@ sequenceDiagram
 - [ ] Templates use clear placeholder fields that Alignment fills from state
 - [ ] Alignment falls back to these when the user has no template in `state/uploads/`
 
-### US-009: State stays private and human-editable
+### US-010: State stays private and human-editable
 **Description:** As a user, I want my state, goals, and actions to be plain, editable files that never get pushed to a public remote.
 
 **Acceptance Criteria:**
@@ -400,35 +448,37 @@ sequenceDiagram
 
 ## 8. Functional Requirements
 
-- **FR-1:** The system must expose exactly one Mind Card that bundles four skills: Info Retrieval, Career Compass, Finder, Alignment.
+- **FR-1:** The system must expose exactly one Mind Card that bundles five skills: Info Retrieval, Career Compass, Finder, Paper Briefing, Alignment.
 - **FR-2:** The system must store structured state/action data as markdown files: `state/` (identity, experience, interests.md, beliefs.md), `goal/` (goals.md), and `action/` (roadmap/, discovery/, applications/). Raw uploaded files remain in their original formats under `state/uploads/`.
 - **FR-3:** Info Retrieval must support an **upload path**: the user uploads files in chat, the card saves the raw files to `state/uploads/`, then refines extracted facts into `state/` and `goal/`.
 - **FR-4:** Info Retrieval must support an **interview path**: present a **list of focused questions** on a chosen topic (experience/interests/beliefs/goals — beliefs being the core-identity topic to invest most in), iterate with follow-ups, and refine/enrich the correct file.
 - **FR-5:** Each experience must be a separate markdown file **with frontmatter** and a freeform Markdown body for richer detail; `state/TIMELINE.md` is **derived** from that frontmatter (not hand-maintained) and links each entry to its source file.
 - **FR-6:** Career Compass must read `state/`, `goal/`, and recent `action/` artifacts to produce a grounded roadmap report under `action/roadmap/`, plus a derived `action/ROADMAP.md` index.
-- **FR-7:** Finder must require a **target school**, read `state/` + `goal/`, then run deep research scoped to that school to produce a ranked **PI/lab** report (`action/discovery/`) grounded in state, beliefs, and goal direction.
-- **FR-8:** Alignment must accept a target URL, resolve a template (user-provided from `state/uploads/` or the bundled default), analyze the target, and generate a tailored CV and SOP grounded strictly in `state`, rendered as **`.tex` and compiled to `.pdf`** into `action/applications/<slug>/`; the CV must be exactly one page.
-- **FR-9:** No skill may fabricate facts not present in `state` or the analyzed target; unsupported claims must be flagged, not invented.
-- **FR-10:** The only operations any skill may perform on `state`/`goal` are **refine** and **enrichment**. Destructive overwrite or deletion of user-authored content is not permitted.
-- **FR-11:** `state/`, `goal/`, and `action/` must be git-ignored; the shareable card must contain no personal data.
-- **FR-12:** When Info Retrieval detects a conflict between new input and existing state, it must **stop and ask the user to clarify**; it must not auto-resolve.
-- **FR-13:** The card must ship **default `cv-template.tex` and `sop-template.tex`** (containing no personal data) used when the user has not provided their own template.
+- **FR-7:** Finder must require a **target school**, read `state/` + `goal/`, then run deep research scoped to that school to produce generated `action/discovery/INDEX.md` and per-PI folders `action/discovery/<school-slug>-<pi-slug>/` grounded in state, beliefs, and goal direction.
+- **FR-8:** Paper Briefing must read Finder outputs and create per-PI `dossier.md` and `briefing.md` files with paper citations, links, abstracts, abstract-based selected-paper notes, fit analysis, interview questions, and SOP talking points. It must fetch/read full papers only when the user expressly requests a paper summary or specific details inside a paper, and it must not store full copyrighted PDFs by default.
+- **FR-9:** Alignment must accept a target URL, resolve a template (user-provided from `state/uploads/` or the bundled default), analyze the target, read relevant discovery briefings when available, and generate a tailored CV and SOP grounded strictly in `state`, rendered as **`.tex` and compiled to `.pdf`** into `action/applications/<slug>/`; the CV must be exactly one page.
+- **FR-10:** No skill may fabricate facts not present in `state`, `goal`, verified sources, existing `action` artifacts, or the analyzed target; unsupported claims must be flagged, not invented.
+- **FR-11:** The only operations any skill may perform on `state`/`goal` are **refine** and **enrichment**. Destructive overwrite or deletion of user-authored content is not permitted.
+- **FR-12:** `state/`, `goal/`, and `action/` must be git-ignored; the shareable card must contain no personal data.
+- **FR-13:** When Info Retrieval detects a conflict between new input and existing state, it must **stop and ask the user to clarify**; it must not auto-resolve.
+- **FR-14:** The card must ship **default `cv-template.tex` and `sop-template.tex`** (containing no personal data) used when the user has not provided their own template.
 
 ---
 
 ## 9. Technical Considerations
 
 - **Runtime:** Darwinian Mind Card + Codex-first local repo workflow. `drwn write` materializes generated `.codex/skills/` and `.claude/skills/` folders from the card for local agent use.
-- **Card convention (important):** a Darwinian card source is **not** stored inline in the consumer repo. Here the card lives in its **own public git repo** — [`junggyubae/career-planner-card`](https://github.com/junggyubae/career-planner-card) (manifest `card.json`, `skills/`, templates bundled under `skills/alignment/templates/`) — and is pinned into this repo as a **git submodule at `card/`**. This keeps the card independently versioned (currently `v0.2.7`), publicly shareable, and drwn-consumable (`drwn card clone --allow-untrusted-source git+https://github.com/junggyubae/career-planner-card.git#v0.2.7`). **This repo is the *consumer*** (holds private `state/ goal/ action/` + the submodule pointer). Editing flow: change the card repo → tag a release → bump the submodule pointer and `.agents/drwn/config.json` pin here; do not commit `.agents/drwn/card.lock` because it contains machine-specific store paths.
+- **Card convention (important):** a Darwinian card source is **not** stored inline in the consumer repo. Here the card lives in its **own public git repo** — [`junggyubae/career-planner-card`](https://github.com/junggyubae/career-planner-card) (manifest `card.json`, `skills/`, templates bundled under `skills/alignment/templates/`) — and is pinned into this repo as a **git submodule at `card/`**. This keeps the card independently versioned (currently `v0.2.8`), publicly shareable, and drwn-consumable (`drwn card clone --allow-untrusted-source git+https://github.com/junggyubae/career-planner-card.git#v0.2.8`). **This repo is the *consumer*** (holds private `state/ goal/ action/` + the submodule pointer). Editing flow: change the card repo → tag a release → bump the submodule pointer and `.agents/drwn/config.json` pin here; do not commit `.agents/drwn/card.lock` because it contains machine-specific store paths.
 - **No database:** the filesystem is the store. Prefer many small frontmatter-bearing files over few large ones for clean diffs.
-- **Action structure:** `action/` holds `roadmap/YYYY-MM-DD-career-compass.md` (Career Compass), `discovery/<school>-<date>.md` (Finder), and `applications/<slug>/` (Alignment: `target.md` + `cv.{tex,pdf}` + `sop.{tex,pdf}` + `notes.md`). `action/ROADMAP.md` and `applications/BOARD.md` are **derived** indexes.
+- **Action structure:** `action/` holds `roadmap/YYYY-MM-DD-career-compass.md` (Career Compass), `discovery/INDEX.md` plus per-PI folders `<school-slug>-<pi-slug>/` (Finder + Paper Briefing), and `applications/<slug>/` (Alignment: `target.md` + `cv.{tex,pdf}` + `sop.{tex,pdf}` + `notes.md`). `action/ROADMAP.md`, `action/discovery/INDEX.md`, and `applications/BOARD.md` are **derived** indexes.
 - **Derived indexes:** `state/TIMELINE.md`, `action/ROADMAP.md`, and `action/applications/BOARD.md` are generated — never hand-maintained (kills the old `_manager.md` drift).
 - **Privacy boundary:** ship a `.gitignore` that excludes `state/`, `goal/`, and `action/` contents from every commit (re-including only READMEs so the *structure* is shareable), so personal data can never be pushed. The repo itself can be public; the card is shared separately via its git-backed Darwinian card release.
-- **Deep research (Finder):** v1 relies on the agent's research/web tooling, scoped to the named school. Keep the research contract (inputs = school + `state`/`goal` profile, output = ranked PI report) stable so Phase-2 targets can slot in behind it.
+- **Deep research (Finder):** v1 relies on the agent's research/web tooling, scoped to the named school. Keep the research contract (inputs = school + `state`/`goal` profile, output = generated discovery index + per-PI folders) stable so Phase-2 targets can slot in behind it.
+- **Paper research (Paper Briefing):** prefer primary/durable scholarly sources such as lab publication pages, faculty pages, arXiv, PubMed, Semantic Scholar, and publisher/conference pages. Default to abstracts and metadata. Use a full-text access ladder only when the user expressly requests a paper summary or specific details inside a paper: open full text, user-uploaded files, user-authorized browser access, then unavailable fallback. Store citations, links, abstracts, abstract-based notes, access status, and access limitations; do not store full copyrighted PDFs by default. Browser-assisted reading must use only access the user is authorized to view and must not bypass paywalls, DRM, authentication, or institutional access controls. If access limitations block explicitly requested full-paper reading, the agent may suggest an optional browser extension or browser bridge in the future, but the card does not require one.
 - **URL fetching (Alignment):** must degrade gracefully if a target page is unreachable (ask the user to paste the content).
 - **LaTeX toolchain:** Alignment compiles `.tex` → `.pdf` with **`tectonic` first** and **`pdflatex` as fallback**. If neither compiler is installed, the card should still emit the `.tex` and recommend installing Tectonic later. Default templates must compile with Tectonic and a vanilla `pdflatex` toolchain (avoid exotic packages / non-standard fonts).
 - **Templates:** default templates live **in the card source** (shareable, under `skills/alignment/templates/`). User templates live in `state/uploads/` (private) and take precedence.
-- **Grounding discipline:** every CV/SOP claim and PI rationale must trace to `state`; flag gaps, never invent.
+- **Grounding discipline:** every CV/SOP claim, PI rationale, and paper briefing fit claim must trace to `state`, `goal`, verified sources, or existing `action`; flag gaps, never invent.
 - **Voice:** SOP generation reads `state/beliefs.md` + `state/interests.md` for tone and `goal/goals.md` for trajectory, not just a list of experience.
 
 ---

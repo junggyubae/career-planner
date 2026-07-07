@@ -39,10 +39,12 @@ printf "\nGenerated skills\n"
 check_file .codex/skills/info-retrieval/SKILL.md
 check_file .codex/skills/career-compass/SKILL.md
 check_file .codex/skills/finder/SKILL.md
+check_file .codex/skills/paper-briefing/SKILL.md
 check_file .codex/skills/alignment/SKILL.md
 check_file .claude/skills/info-retrieval/SKILL.md
 check_file .claude/skills/career-compass/SKILL.md
 check_file .claude/skills/finder/SKILL.md
+check_file .claude/skills/paper-briefing/SKILL.md
 check_file .claude/skills/alignment/SKILL.md
 
 printf "\nPrivacy ignores\n"
